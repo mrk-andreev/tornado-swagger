@@ -3,6 +3,7 @@ tornado-swagger
 
 [![Build Status](https://travis-ci.org/mrk-andreev/tornado-swagger.svg?branch=master)](https://travis-ci.org/mrk-andreev/tornado-swagger)
 ![PyPI](https://img.shields.io/pypi/v/tornado-swagger.svg)
+![](https://anaconda.org/mrk.andreev/tornado-swagger/badges/version.svg)
 ![GitHub](https://img.shields.io/github/license/mrk-andreev/tornado-swagger.svg)
 
 *tornado-swagger: Swagger API Documentation builder for tornado server. Inspired by aiohttp-swagger package.*
@@ -17,6 +18,7 @@ Installation
 ----------------------
 
     pip install -U tornado-swagger
+    conda install -c mrk.andreev tornado-swagger 
 
 
 What's tornado-swagger

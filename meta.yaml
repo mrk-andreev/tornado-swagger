@@ -1,0 +1,12 @@
+package:
+  name: tornado-swagger
+  version: 1.0.0
+
+build:
+  number: 3
+
+requirements:
+  run:
+    - python
+about:
+  summary: Swagger API Documentation builder for tornado server. Inspired by aiohttp-swagger package.
