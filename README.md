@@ -1,6 +1,9 @@
 tornado-swagger
 ===============
 
+[![Build Status](https://travis-ci.org/mrk-andreev/tornado-swagger.svg?branch=master)](https://travis-ci.org/mrk-andreev/tornado-swagger)
+![GitHub](https://img.shields.io/github/license/mrk-andreev/tornado-swagger.svg)
+
 *tornado-swagger: Swagger API Documentation builder for tornado server. Inspired by aiohttp-swagger package.*
 
 Documentation |  https://github.com/mrk-andreev/tornado-swagger/wiki
