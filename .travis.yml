@@ -8,3 +8,10 @@ install:
   - pip install -r requirements-dev.txt
 script:
   - python -m pytest .
+deploy:
+  provider: pypi
+  user: $PYPI_USER
+  password: $PYPI_PASSWD
+  distributions: "sdist"
+  on:
+    branch: master
