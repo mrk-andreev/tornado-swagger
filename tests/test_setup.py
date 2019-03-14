@@ -72,7 +72,7 @@ def server():
 
 def test_swagger_setup_integration(server):
     client = tornado.httpclient.HTTPClient()
-    response = client.fetch(f'http://localhost:{server}{SWAGGER_URL}')
+    response = client.fetch('http://localhost:{0}{1}'.format(server, SWAGGER_URL))
     assert 'Swagger UI' in response.body.decode()
 
 
