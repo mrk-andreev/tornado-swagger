@@ -13,6 +13,12 @@ Code | https://github.com/mrk-andreev/tornado-swagger
 Issues | https://github.com/mrk-andreev/tornado-swagger/issues
 Python version | Python 3.4 and above
 
+Installation
+----------------------
+
+    pip install -U tornado-swagger
+
+
 What's tornado-swagger
 ----------------------
 
