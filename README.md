@@ -4,6 +4,7 @@ tornado-swagger
 [![Build Status](https://travis-ci.org/mrk-andreev/tornado-swagger.svg?branch=master)](https://travis-ci.org/mrk-andreev/tornado-swagger)
 ![PyPI](https://img.shields.io/pypi/v/tornado-swagger.svg)
 ![](https://anaconda.org/mrk.andreev/tornado-swagger/badges/version.svg)
+![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/mrk-andreev/tornado-swagger.svg)
 ![GitHub](https://img.shields.io/github/license/mrk-andreev/tornado-swagger.svg)
 
 *tornado-swagger: Swagger API Documentation builder for tornado server. Inspired by aiohttp-swagger package.*
