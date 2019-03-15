@@ -2,12 +2,33 @@ tornado-swagger
 ===============
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/d45717a5cfedeaef195a/maintainability)](https://codeclimate.com/github/mrk-andreev/tornado-swagger/maintainability)
-[![Build Status](https://travis-ci.org/mrk-andreev/tornado-swagger.svg?branch=master)](https://travis-ci.org/mrk-andreev/tornado-swagger)
-![PyPI](https://img.shields.io/pypi/v/tornado-swagger.svg)
-![](https://anaconda.org/mrk.andreev/tornado-swagger/badges/version.svg)
 ![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/mrk-andreev/tornado-swagger.svg)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmrk-andreev%2Ftornado-swagger.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmrk-andreev%2Ftornado-swagger?ref=badge_shield)
 ![GitHub](https://img.shields.io/github/license/mrk-andreev/tornado-swagger.svg)
+
+
+| PyPI                                        | Anaconda                                      |
+|----------------------------------------------|----------------------------------------------|
+| [![PyPI][pypi_image]][pypi_link] | [![Anaconda][anaconda_image]][anaconda_link] |
+
+
+[pypi_link]: https://pypi.org/project/tornado-swagger/
+[pypi_image]: https://img.shields.io/pypi/v/tornado-swagger.svg
+
+[anaconda_link]: https://anaconda.org/mrk.andreev/tornado-swagger
+[anaconda_image]: https://anaconda.org/mrk.andreev/tornado-swagger/badges/version.svg
+
+
+
+| Linux/MacOS                                        | Windows                                      |
+|----------------------------------------------|----------------------------------------------|
+| [![TravisCI][travisci_image]][travisci_link] | [![AppVeyor][appveyor_image]][appveyor_link] |
+
+[travisci_link]: https://travis-ci.org/mrk-andreev/tornado-swagger
+[travisci_image]: https://travis-ci.org/mrk-andreev/tornado-swagger.svg?branch=master
+
+[appveyor_link]: https://ci.appveyor.com/project/mrk-andreev/tornado-swagger/branch/master
+[appveyor_image]: https://img.shields.io/appveyor/ci/mrk-andreev/tornado-swagger/master.svg
 
 *tornado-swagger: Swagger API Documentation builder for tornado server. Inspired by aiohttp-swagger package.*
 
