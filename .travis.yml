@@ -4,9 +4,6 @@ python:
   - "3.5"
   - "3.6"
   - "3.7-dev"
-os:
-  - linux
-  - osx
 install:
   - pip install -r requirements-dev.txt
 script:

@@ -20,7 +20,7 @@ tornado-swagger
 
 
 
-| Linux/MacOS                                        | Windows                                      |
+| Linux                                        | Windows                                      |
 |----------------------------------------------|----------------------------------------------|
 | [![TravisCI][travisci_image]][travisci_link] | [![AppVeyor][appveyor_image]][appveyor_link] |
 
