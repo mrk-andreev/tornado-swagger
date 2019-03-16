@@ -53,6 +53,15 @@ tornado-swagger is a plugin for tornado server that allow to document APIs using
 What's new?
 -----------
 
+### Version 1.1.0
+
+- Swagger model definition
+- Parameters filling in route path
+- Schema definition
+- `export_swagger(routes)` as public function
+- Update frontend
+
+
 ### Version 1.0.0
 
 - First version released
