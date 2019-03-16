@@ -4,7 +4,19 @@ python:
   - "3.5"
   - "3.6"
   - "3.7-dev"
+
 install:
   - pip install -r requirements-dev.txt
+
 script:
   - python -m pytest .
+
+deploy:
+  distributions: "sdist bdist_wheel"
+  provider: pypi
+  user: mrk-andreev
+  password:
+    secure: "eYJRbm6JYVGHon+9oizfo94lnoOVN7mS/PTY3S1H44QxL6pCihPSsG7vuvijN7RTnMmJITI0gtib097RMkw3w3cpKcoHeSPpH4q5s3/JaVFe6e6FefLfkbqf2vF9U17CIXpBlzEQmAVe9qXVbUbAB0gvnVoIECmc6G2hgArpzd9wgfPJnLql7yaKl7cAeVIdGxnq3aP5KchdIF2rkr+PwiayCA9ic7vpRinFoz+5HMl5QA72Cqs4bJ9Ccc3Kokuo2rfrYL1H2VK4i8deZ1TFNlQ0Xe9Xxf6YAk5+ZfQMqrymYaMw+HeU31iYuMNL55sP7Zp2mcMDN8ddcdo152or3xets7rFoQiAkDI0WOxvVfoMz+RM3+mmWxz+U0Fi3z87ZEuWPMpPO274t6vrSnyu/6lTxmJSrMNA+Z1aJec9hhBiwz72zdA+t92p59bhXe2osGrJmDyZjvuHkjzmBYB7OvILOIWvsZAz4H9EhtWafIqZT/TJjxbIi84f/tmrhJVSxDPyJ+bgWWuTMw/TlKunFpBkXc6TqCg+0AZGfgj5ArxQuME7AayimrrCMurCuazds3v/DATlH+8QFVWsErb0buWnhCGGb4WOA5ocxCZ284+5G4Ic+HiS9KeHZFxulZ5NOm8qrKcYNlHtW9WP6Yek6WHMA2uOReAxb7kC05Z4FlU="
+  on:
+    tags: true
+    branch: master
