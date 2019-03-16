@@ -50,6 +50,33 @@ What's tornado-swagger
 
 tornado-swagger is a plugin for tornado server that allow to document APIs using Swagger show the Swagger-ui console.
 
+![](https://github.com/mrk-andreev/tornado-swagger/blob/master/docs/wiki__swagger_single_endpoint.png)
+
+```python
+class PostsDetailsHandler(tornado.web.RequestHandler):
+    def get(self, posts_id):
+        """
+        ---
+        tags:
+        - Posts
+        summary: Get posts details
+        description: posts full version
+        produces:
+        - application/json
+        parameters:
+        -   name: posts_id
+            in: path
+            description: ID of post to return
+            required: true
+            type: string
+        responses:
+            200:
+              description: list of posts
+              schema:
+                $ref: '#/definitions/PostModel'
+        """
+```
+
 What's new?
 -----------
 
