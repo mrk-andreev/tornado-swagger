@@ -13,6 +13,7 @@ script:
 
 deploy:
   distributions: "sdist bdist_wheel"
+  skip_existing: true
   provider: pypi
   user: mrk-andreev
   password:
