@@ -1,7 +1,9 @@
 import tornado.web
 
 from tornado_swagger.helpers.builders import _build_doc_from_func_doc
+from tornado_swagger.helpers.builders import _extract_parameters_names
 from tornado_swagger.helpers.builders import _extract_swagger_docs
+from tornado_swagger.helpers.builders import _format_handler_path
 from tornado_swagger.helpers.builders import generate_doc_from_each_end_point
 
 SWAGGER_DOC_SEPARATOR = '---'
@@ -88,3 +90,39 @@ def test_generate_doc_from_each_end_point():
         security_definitions=None
     )
     assert docs
+
+
+def test_extract_parameters_names_empty_parameter():
+    class HandlerWithEmptyParameter(tornado.web.RequestHandler):
+        def get(self):
+            pass
+
+    parameters = _extract_parameters_names(HandlerWithEmptyParameter, 0)
+    assert parameters == []
+
+
+def test_extract_parameters_names_signle_parameter():
+    class HandlerWithSingleParameter(tornado.web.RequestHandler):
+        def get(self, posts_id):
+            pass
+
+    parameters = _extract_parameters_names(HandlerWithSingleParameter, 1)
+    assert parameters == ['posts_id']
+
+
+def test_extract_parameters_names_multiple():
+    class HandlerWithMultipleParameter(tornado.web.RequestHandler):
+        def get(self, posts_id, post_id2, post_id3):
+            pass
+
+    parameters = _extract_parameters_names(HandlerWithMultipleParameter, 3)
+    assert parameters == ['posts_id', 'post_id2', 'post_id3']
+
+
+def test__format_handler_path():
+    class HandlerWithMultipleParameter(tornado.web.RequestHandler):
+        def get(self, posts_id, post_id2, post_id3):
+            pass
+
+    route_path = _format_handler_path(tornado.web.url(r'/api/(\w+)/(\w+)/(\w+)', HandlerWithMultipleParameter))
+    assert route_path == '/api/{posts_id}/{post_id2}/{post_id3}'

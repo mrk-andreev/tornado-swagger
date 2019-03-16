@@ -1,7 +1,9 @@
 import collections
 import json
 import os
+import re
 import typing
+import inspect
 
 import tornado.web
 import yaml
@@ -51,6 +53,32 @@ def _build_doc_from_func_doc(handler):
     return out
 
 
+def _extract_parameters_names(handler, parameters_count):
+    if parameters_count == 0:
+        return []
+
+    parameters = ['{?}' for _ in range(parameters_count)]
+
+    for method in handler.SUPPORTED_METHODS:
+        method_handler = getattr(handler, method.lower())
+        for i, arg in enumerate(inspect.getfullargspec(method_handler).args[1:]):
+            if set(arg) != {'_'}:
+                parameters[i] = arg
+
+    return parameters
+
+
+def _format_handler_path(route):
+    brackets_regex = re.compile(r'\(.*?\)')
+    parameters = _extract_parameters_names(route.target, route.regex.groups)
+    route_pattern: str = route.regex.pattern
+
+    for i, entity in enumerate(brackets_regex.findall(route_pattern)):
+        route_pattern = route_pattern.replace(entity, '{%s}' % parameters[i], 1)
+
+    return route_pattern[:-1]
+
+
 def generate_doc_from_each_end_point(routes: typing.List[tornado.web.URLSpec],
                                      *,
                                      api_base_url,
@@ -96,6 +124,6 @@ def generate_doc_from_each_end_point(routes: typing.List[tornado.web.URLSpec],
     swagger['paths'] = collections.defaultdict(dict)
 
     for route in routes:
-        swagger["paths"][route.regex.pattern[:-1]].update(_build_doc_from_func_doc(route.target))
+        swagger["paths"][_format_handler_path(route)].update(_build_doc_from_func_doc(route.target))
 
     return json.dumps(swagger)
