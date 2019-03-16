@@ -85,6 +85,16 @@ def _format_handler_path(route):
     return route_pattern[:-1]
 
 
+def nesteddict2yaml(d, indent=10, result=''):
+    for key, value in d.items():
+        result += ' ' * indent + str(key) + ':'
+        if isinstance(value, dict):
+            result = nesteddict2yaml(value, indent + 2, result + '\n')
+        else:
+            result += ' ' + str(value) + '\n'
+    return result
+
+
 def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
                                 *,
                                 api_base_url,
@@ -101,15 +111,6 @@ def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
             _start_desc = i
             break
     cleaned_description = '    '.join(description[_start_desc:].splitlines())
-
-    def nesteddict2yaml(d, indent=10, result=''):
-        for key, value in d.items():
-            result += ' ' * indent + str(key) + ':'
-            if isinstance(value, dict):
-                result = nesteddict2yaml(value, indent + 2, result + '\n')
-            else:
-                result += ' ' + str(value) + '\n'
-        return result
 
     # Load base Swagger template
     jinja2_env = Environment(loader=BaseLoader())
