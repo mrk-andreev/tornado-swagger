@@ -3,9 +3,9 @@ import typing
 
 import tornado.web
 
+from tornado_swagger._builders import generate_doc_from_endpoints
 from tornado_swagger._handlers import SwaggerDefHandler
 from tornado_swagger._handlers import SwaggerHomeHandler
-from tornado_swagger._builders import generate_doc_from_endpoints
 
 STATIC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'swagger_ui'))
 
@@ -21,7 +21,7 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                   schemes: list = None,
                   security_definitions: dict = None
                   ):
-    swagger_info = generate_doc_from_endpoints(
+    SwaggerDefHandler.SWAGGER_DEF_CONTENT = generate_doc_from_endpoints(
         routes,
         api_base_url=api_base_url,
         description=description,
@@ -48,7 +48,6 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
         })
     ]
 
-    SwaggerDefHandler.SWAGGER_DEF_CONTENT = swagger_info
     with open(os.path.join(STATIC_PATH, 'index.html'), 'r') as f:
         SwaggerHomeHandler.SWAGGER_HOME_TEMPLATE = (
             f.read().replace(
