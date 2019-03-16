@@ -1,9 +1,9 @@
 import collections
+import inspect
 import json
 import os
 import re
 import typing
-import inspect
 
 import tornado.web
 import yaml
@@ -11,32 +11,37 @@ from jinja2 import BaseLoader
 from jinja2 import Environment
 
 SWAGGER_TEMPLATE = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..', 'templates')
+    os.path.join(os.path.dirname(__file__), '..', 'templates', 'swagger.yaml')
 )
+SWAGGER_DOC_SEPARATOR = '---'
 
 
-def _extract_swagger_docs(endpoint_doc, method):
+def _extract_swagger_definition(endpoint_doc):
+    endpoint_doc = endpoint_doc.splitlines()
+
     # Find Swagger start point in doc
-    end_point_swagger_start = 0
     for i, doc_line in enumerate(endpoint_doc):
-        if "---" in doc_line:
+        if SWAGGER_DOC_SEPARATOR in doc_line:
             end_point_swagger_start = i + 1
+            endpoint_doc = endpoint_doc[end_point_swagger_start:]
             break
+    return '\n'.join(endpoint_doc)
+
+
+def extract_swagger_docs(endpoint_doc):
+    endpoint_doc = _extract_swagger_definition(endpoint_doc)
 
     # Build JSON YAML Obj
     try:
-        end_point_swagger_doc = (
-            yaml.safe_load("\n".join(endpoint_doc[end_point_swagger_start:]))
-        )
+        end_point_swagger_doc = yaml.safe_load(endpoint_doc)
+        if not isinstance(end_point_swagger_doc, dict):
+            raise yaml.YAMLError()
     except yaml.YAMLError:
         end_point_swagger_doc = {
-            "description": "⚠ Swagger document could not be loaded "
-                           "from docstring ⚠",
-            "tags": ["Invalid Swagger"]
+            'description': 'Swagger document could not be loaded from docstring',
+            'tags': ['Invalid Swagger']
         }
-    return {
-        method: end_point_swagger_doc
-    }
+    return end_point_swagger_doc
 
 
 def _build_doc_from_func_doc(handler):
@@ -47,8 +52,9 @@ def _build_doc_from_func_doc(handler):
         doc = getattr(handler, method).__doc__
 
         if doc is not None and '---' in doc:
-            end_point_doc = doc.splitlines()
-            out.update(_extract_swagger_docs(end_point_doc, method=method))
+            out.update({
+                method: extract_swagger_docs(doc)
+            })
 
     return out
 
@@ -79,14 +85,15 @@ def _format_handler_path(route):
     return route_pattern[:-1]
 
 
-def generate_doc_from_each_end_point(routes: typing.List[tornado.web.URLSpec],
-                                     *,
-                                     api_base_url,
-                                     description,
-                                     api_version,
-                                     title,
-                                     contact,
-                                     security_definitions):
+def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
+                                *,
+                                api_base_url,
+                                description,
+                                api_version,
+                                title,
+                                contact,
+                                security_definitions):
+    from tornado_swagger.model import swagger_models
     # Clean description
     _start_desc = 0
     for i, word in enumerate(description):
@@ -108,7 +115,7 @@ def generate_doc_from_each_end_point(routes: typing.List[tornado.web.URLSpec],
     jinja2_env = Environment(loader=BaseLoader())
     jinja2_env.filters['nesteddict2yaml'] = nesteddict2yaml
 
-    with open(os.path.join(SWAGGER_TEMPLATE, 'swagger.yaml'), 'r') as f:
+    with open(SWAGGER_TEMPLATE, 'r') as f:
         swagger_base = (
             jinja2_env.from_string(f.read()).render(
                 description=cleaned_description,
@@ -116,12 +123,14 @@ def generate_doc_from_each_end_point(routes: typing.List[tornado.web.URLSpec],
                 title=title,
                 contact=contact,
                 base_path=api_base_url,
-                security_definitions=security_definitions)
+                security_definitions=security_definitions,
+            )
         )
 
     # The Swagger OBJ
     swagger = yaml.safe_load(swagger_base)
     swagger['paths'] = collections.defaultdict(dict)
+    swagger['definitions'] = swagger_models
 
     for route in routes:
         swagger["paths"][_format_handler_path(route)].update(_build_doc_from_func_doc(route.target))

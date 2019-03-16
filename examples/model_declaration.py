@@ -2,6 +2,7 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 
+from tornado_swagger.model import register_swagger_model
 from tornado_swagger.setup import setup_swagger
 
 
@@ -15,10 +16,14 @@ class PostsHandler(tornado.web.RequestHandler):
         description: List all posts in feed
         produces:
         - application/json
+        responses:
+            200:
+              description: list of posts
+              schema:
+                type: array
+                items:
+                  $ref: '#/definitions/PostModel'
         """
-        self.write({
-            'response': []
-        })
 
     def post(self):
         """
@@ -29,12 +34,14 @@ class PostsHandler(tornado.web.RequestHandler):
         description: Add posts in feed
         produces:
         - application/json
+        parameters:
+        -   in: body
+            name: body
+            description: post data
+            required: true
+            schema:
+              $ref: '#/definitions/PostModel'
         """
-        self.write({
-            'response': {
-                'post_id': None
-            }
-        })
 
 
 class PostsDetailsHandler(tornado.web.RequestHandler):
@@ -53,14 +60,12 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
             description: ID of post to return
             required: true
             type: string
+        responses:
+            200:
+              description: list of posts
+              schema:
+                $ref: '#/definitions/PostModel'
         """
-        self.write({
-            'response': {
-                'id': posts_id,
-                'title': '',
-                'text': ''
-            }
-        })
 
     def patch(self, posts_id):
         """
@@ -77,12 +82,13 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
             description: ID of post to edit
             required: true
             type: string
+        -   in: body
+            name: body
+            description: post data
+            required: true
+            schema:
+              $ref: '#/definitions/PostModel'
         """
-        self.write({
-            'response': {
-                'success': True
-            }
-        })
 
     def delete(self, posts_id):
         """
@@ -100,11 +106,26 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
             required: true
             type: string
         """
-        self.write({
-            'response': {
-                'success': True
-            }
-        })
+
+
+@register_swagger_model
+class PostModel:
+    """
+    ---
+    type: object
+    description: Post model representation
+    properties:
+        id:
+            type: integer
+            format: int64
+        title:
+            type: string
+        text:
+            type: string
+        is_visible:
+            type: boolean
+            default: true
+    """
 
 
 class Application(tornado.web.Application):

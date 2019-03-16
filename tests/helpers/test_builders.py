@@ -2,12 +2,13 @@ import tornado.web
 
 from tornado_swagger.helpers.builders import _build_doc_from_func_doc
 from tornado_swagger.helpers.builders import _extract_parameters_names
-from tornado_swagger.helpers.builders import _extract_swagger_docs
 from tornado_swagger.helpers.builders import _format_handler_path
-from tornado_swagger.helpers.builders import generate_doc_from_each_end_point
+from tornado_swagger.helpers.builders import extract_swagger_docs
+from tornado_swagger.helpers.builders import generate_doc_from_endpoints
+from tornado_swagger.helpers.builders import SWAGGER_DOC_SEPARATOR
 
-SWAGGER_DOC_SEPARATOR = '---'
-
+INVALID_ENDPOINT_DOC = SWAGGER_DOC_SEPARATOR + """
+tag"""
 ENDPOINT_DOC = SWAGGER_DOC_SEPARATOR + """
 tags:
   - Example
@@ -50,17 +51,15 @@ responses:
   description: successful operation
 """
 
-METHOD_NAME = 'get'
-
 
 def test_extract_swagger_docs():
-    docs = _extract_swagger_docs(ENDPOINT_DOC.splitlines(), METHOD_NAME)
-    assert 'Invalid Swagger' not in docs['get']['tags']
+    docs = extract_swagger_docs(ENDPOINT_DOC)
+    assert 'Invalid Swagger' not in docs['tags']
 
 
 def test_invalid_extract_swagger_docs():
-    docs = _extract_swagger_docs(ENDPOINT_DOC, METHOD_NAME)
-    assert 'Invalid Swagger' in docs['get']['tags']
+    docs = extract_swagger_docs(INVALID_ENDPOINT_DOC)
+    assert 'Invalid Swagger' in docs['tags']
 
 
 class ExampleHandler(tornado.web.RequestHandler):
@@ -80,7 +79,7 @@ def test_generate_doc_from_each_end_point():
         tornado.web.url(r'/api/example', ExampleHandler, name='example'),
     ]
 
-    docs = generate_doc_from_each_end_point(
+    docs = generate_doc_from_endpoints(
         routes,
         api_base_url='/',
         description='',
