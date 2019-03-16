@@ -102,6 +102,7 @@ def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
                                 api_version,
                                 title,
                                 contact,
+                                schemes,
                                 security_definitions):
     from tornado_swagger.model import swagger_models
     # Clean description
@@ -130,6 +131,7 @@ def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
 
     # The Swagger OBJ
     swagger = yaml.safe_load(swagger_base)
+    swagger['schemes'] = schemes
     swagger['paths'] = collections.defaultdict(dict)
     swagger['definitions'] = swagger_models
 
