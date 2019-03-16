@@ -30,7 +30,7 @@ tornado-swagger
 [appveyor_link]: https://ci.appveyor.com/project/mrk-andreev/tornado-swagger/branch/master
 [appveyor_image]: https://img.shields.io/appveyor/ci/mrk-andreev/tornado-swagger/master.svg
 
-*tornado-swagger: Swagger API Documentation builder for tornado server. Inspired by aiohttp-swagger package.*
+*tornado-swagger: Swagger API Documentation builder for tornado server. Inspired by [aiohttp-swagger](https://github.com/cr0hn/aiohttp-swagger) package (based on this package sources).*
 
 Documentation |  https://github.com/mrk-andreev/tornado-swagger/wiki
 ------------- | -------------------------------------------------
