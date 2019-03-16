@@ -8,6 +8,7 @@ import tornado.httpclient
 import tornado.ioloop
 import tornado.web
 
+from tornado_swagger.setup import export_swagger
 from tornado_swagger.setup import setup_swagger
 
 SERVER_START_TIMEOUT = 3
@@ -40,16 +41,20 @@ class ExampleHandler(tornado.web.RequestHandler):
 
 
 class Application(tornado.web.Application):
-    _routes = [
+    routes = [
         tornado.web.url(r'/api/example', ExampleHandler)
     ]
 
     def __init__(self):
         setup_swagger(
-            self._routes,
+            self.routes,
             swagger_url=SWAGGER_URL,
         )
-        super(Application, self).__init__(self._routes)
+        super(Application, self).__init__(self.routes)
+
+
+def test_export_swagger():
+    assert export_swagger(Application.routes)
 
 
 def server_holder(port):
