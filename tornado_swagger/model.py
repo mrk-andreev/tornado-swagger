@@ -1,6 +1,6 @@
 import functools
 
-from tornado_swagger.helpers.builders import extract_swagger_docs
+from tornado_swagger.builders import extract_swagger_docs
 
 swagger_models = {}
 

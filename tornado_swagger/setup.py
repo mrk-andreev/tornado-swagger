@@ -5,7 +5,7 @@ import tornado.web
 
 from tornado_swagger.handlers import SwaggerDefHandler
 from tornado_swagger.handlers import SwaggerHomeHandler
-from tornado_swagger.helpers.builders import generate_doc_from_endpoints
+from tornado_swagger.builders import generate_doc_from_endpoints
 
 STATIC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'swagger_ui'))
 

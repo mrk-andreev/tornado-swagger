@@ -1,11 +1,11 @@
 import tornado.web
 
-from tornado_swagger.helpers.builders import _build_doc_from_func_doc
-from tornado_swagger.helpers.builders import _extract_parameters_names
-from tornado_swagger.helpers.builders import _format_handler_path
-from tornado_swagger.helpers.builders import extract_swagger_docs
-from tornado_swagger.helpers.builders import generate_doc_from_endpoints
-from tornado_swagger.helpers.builders import SWAGGER_DOC_SEPARATOR
+from tornado_swagger.builders import _build_doc_from_func_doc
+from tornado_swagger.builders import _extract_parameters_names
+from tornado_swagger.builders import _format_handler_path
+from tornado_swagger.builders import extract_swagger_docs
+from tornado_swagger.builders import generate_doc_from_endpoints
+from tornado_swagger.builders import SWAGGER_DOC_SEPARATOR
 
 INVALID_ENDPOINT_DOC = SWAGGER_DOC_SEPARATOR + """
 tag"""
@@ -86,7 +86,8 @@ def test_generate_doc_from_each_end_point():
         api_version='',
         title='',
         contact='',
-        security_definitions=None
+        security_definitions=None,
+        schemes=[]
     )
     assert docs
 

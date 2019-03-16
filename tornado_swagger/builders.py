@@ -11,7 +11,7 @@ from jinja2 import BaseLoader
 from jinja2 import Environment
 
 SWAGGER_TEMPLATE = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..', 'templates', 'swagger.yaml')
+    os.path.join(os.path.dirname(__file__), 'templates', 'swagger.yaml')
 )
 SWAGGER_DOC_SEPARATOR = '---'
 
