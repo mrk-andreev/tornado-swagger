@@ -139,7 +139,21 @@ class Application(tornado.web.Application):
             'debug': True
         }
 
-        setup_swagger(self._routes)
+        setup_swagger(self._routes,
+                      swagger_url='/doc',
+                      api_base_url='/',
+                      description='',
+                      api_version='1.0.0',
+                      title='Journal API',
+                      contact='name@domain',
+                      schemes=['https'],
+                      security_definitions={
+                          'ApiKeyAuth': {
+                              'type': 'apiKey',
+                              'in': 'header',
+                              'name': 'X-API-Key'
+                          }
+                      })
         super(Application, self).__init__(self._routes, **settings)
 
 
