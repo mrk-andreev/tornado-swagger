@@ -57,6 +57,7 @@ def setup_package():
         include_package_data=True,
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
+        long_description_content_type='text/markdown',
         classifiers=CLASSIFIERS,
         tests_require=['pytest'],
         cmdclass=dict(test=PyTest)
