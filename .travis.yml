@@ -15,9 +15,8 @@ deploy:
   distributions: "sdist bdist_wheel"
   skip_existing: true
   provider: pypi
-  user: $PYPI_USER
+  user: "mrk-andreev"
   password:
-    secure: $PYPI_SECURE
+    secure: "cF4rY9R1fsEUTo61cf05146AalojnRZr1Gq6ZKyYLOqkDAyCWEhKO6hhluPhKG86f8ZKpVQmvknWqWiN3fOOkbEPIULVpRzp7RGWxpiXDP/nYni8Bf7f3wk2CQhr7Usn9+In27rbGN+D7SrogWYVSV20cPyolGiT6+qjYl9bJjs4DkgZqWS2YiRbuiwxTYdTZRXNIGqUU4zA7Mjc8CLp6gWYOooB3unMJCIMpmY3EvUCXre4t3StCNH33u7eaZXEInxPIIMEX6XGKsCC43rrOvpAm3TmqqOWroxcMfxEuDUUpRiM8fapVsS00V1KC6UW0+RYqhfBKA5EfPezNLmsco5XQvJn0YRMyZXvIG2jVdSPJRcXxT05mDpj0fhqLQnc/4AMfyn7eoymLq+44DhzlKEaJ4m+vsFfAhl8vxHJYP7uWa8//d+ReX8PuU4GOObjY0B9U73c4oqL2MtUhoynvkYyM9DA+w43wjwO/PElae+W6CUPGY4eJ0Vt3xmOQU1W9Vnj9fWPcVkDq2K9nDVnTMaeIL8y7HTFWcs+MY6s1BeKSqM1l9LiwGGKFov2YHF1r8UDLydZqbDCYxatV7zzTDS3UJ65hA26x6Poh7idXJ+fN+zpQstTJcq+4Yx/ylUFPRtP0K+qpRrng8/G1SjuA8mp8PU72MyRA0F/ZqCaRwI="
   on:
-    tags: true
     branch: master
