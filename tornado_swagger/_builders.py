@@ -67,9 +67,12 @@ def _extract_parameters_names(handler, parameters_count):
 
     for method in handler.SUPPORTED_METHODS:
         method_handler = getattr(handler, method.lower())
-        for i, arg in enumerate(inspect.getfullargspec(method_handler).args[1:]):
-            if set(arg) != {'_'}:
-                parameters[i] = arg
+        args = inspect.getfullargspec(method_handler).args[1:]
+
+        if len(args) > 0:
+            for i, arg in enumerate(args):
+                if set(arg) != {'_'}:
+                    parameters[i] = arg
 
     return parameters
 
