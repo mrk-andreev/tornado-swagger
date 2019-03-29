@@ -1,5 +1,3 @@
-import functools
-
 from tornado_swagger._builders import extract_swagger_docs
 
 swagger_models = {}
@@ -15,9 +13,4 @@ def _save_model_doc(model):
 
 def register_swagger_model(model):
     _save_model_doc(model)
-
-    @functools.wraps(model)
-    def wrapper(*args, **kwargs):
-        return model(*args, **kwargs)
-
-    return wrapper
+    return model
