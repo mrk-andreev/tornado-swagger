@@ -84,15 +84,3 @@ def test_swagger_setup_integration(server):
 @pytest.fixture()
 def swaggered_app():
     return Application()
-
-
-def test_swagger_schema_endpoints(swaggered_app):
-    router_rules = [
-        rule.regex.pattern
-        for rule in swaggered_app.wildcard_router.rules
-    ]
-
-    assert any([
-        rule[:-1].endswith('/swagger.json')
-        for rule in router_rules
-    ])
