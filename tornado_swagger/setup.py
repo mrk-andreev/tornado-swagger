@@ -59,23 +59,16 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                     else swagger_url)
     _base_swagger_url = _swagger_url.rstrip('/')
     _swagger_def_url = '{}/swagger.json'.format(_base_swagger_url)
-    statics_path = '{}/swagger_static'.format(_base_swagger_url)
 
     routes += [
         tornado.web.url(_swagger_url, SwaggerHomeHandler),
         tornado.web.url('{}/'.format(_base_swagger_url), SwaggerHomeHandler),
         tornado.web.url(_swagger_def_url, SwaggerDefHandler),
-        tornado.web.url(statics_path + '/(.*)', tornado.web.StaticFileHandler, {
-            'path': STATIC_PATH
-        })
     ]
 
     with open(os.path.join(STATIC_PATH, 'index.html'), 'r') as f:
         SwaggerHomeHandler.SWAGGER_HOME_TEMPLATE = (
             f.read().replace(
                 '##SWAGGER_CONFIG##', '{}{}'.format(api_base_url.lstrip('/'), _swagger_def_url)
-            ).replace(
-                '##STATIC_PATH##',
-                '{}{}'.format(api_base_url.lstrip('/'), statics_path)
             )
         )

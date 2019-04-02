@@ -3,16 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Swagger UI</title>
-    <link rel="stylesheet" type="text/css" href="##STATIC_PATH##/static/common.css">
 </head>
 <body class="swagger-section">
 <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
-<link rel="stylesheet" type="text/css" href="##STATIC_PATH##/static/swagger-ui.min.css">
-<script src='##STATIC_PATH##/static/swagger-ui-bundle.min.js' type='text/javascript'></script>
-<script src='##STATIC_PATH##/static/swagger-ui-standalone-preset.min.js' type='text/javascript'></script>
-<script src='##STATIC_PATH##/static/app.js' type='text/javascript'></script>
+<style>
+    html {
+        box-sizing: border-box;
+        overflow: -moz-scrollbars-vertical;
+        overflow-y: scroll;
+    }
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
+    }
+
+    body {
+        margin: 0;
+        background: #fafafa;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.22.0/swagger-ui.css">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.22.0/swagger-ui-bundle.js'
+        type='text/javascript'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.22.0/swagger-ui-standalone-preset.js'
+        type='text/javascript'></script>
 <script type="text/javascript">
     window.SWAGGER_CONFIG_URL = "##SWAGGER_CONFIG##";
+    (function () {
+        window.onload = function () {
+            window.ui = new SwaggerUIBundle({
+                url: SWAGGER_CONFIG_URL,
+                dom_id: "#swagger-ui-container",
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                validatorUrl: "https://validator.swagger.io/validator",
+            });
+        };
+    })();
 </script>
 </body>
 </html>
