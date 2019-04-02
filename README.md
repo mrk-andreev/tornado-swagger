@@ -80,6 +80,10 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 What's new?
 -----------
 
+### Version 1.2.0
+- Replace local js/css to cdn
+- Remove static files serving
+
 ### Version 1.1.0
 
 - Swagger model definition

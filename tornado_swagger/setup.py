@@ -1,10 +1,10 @@
+import json
 import os
 import typing
 
 import tornado.web
 
 from tornado_swagger._builders import generate_doc_from_endpoints
-from tornado_swagger._handlers import SwaggerDefHandler
 from tornado_swagger._handlers import SwaggerHomeHandler
 
 STATIC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'swagger_ui'))
@@ -43,7 +43,7 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                   schemes: list = None,
                   security_definitions: dict = None
                   ):
-    SwaggerDefHandler.SWAGGER_DEF_CONTENT = generate_doc_from_endpoints(
+    swagger_schema = generate_doc_from_endpoints(
         routes,
         api_base_url=api_base_url,
         description=description,
@@ -58,24 +58,16 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                     if not swagger_url.startswith('/')
                     else swagger_url)
     _base_swagger_url = _swagger_url.rstrip('/')
-    _swagger_def_url = '{}/swagger.json'.format(_base_swagger_url)
-    statics_path = '{}/swagger_static'.format(_base_swagger_url)
 
     routes += [
         tornado.web.url(_swagger_url, SwaggerHomeHandler),
         tornado.web.url('{}/'.format(_base_swagger_url), SwaggerHomeHandler),
-        tornado.web.url(_swagger_def_url, SwaggerDefHandler),
-        tornado.web.url(statics_path + '/(.*)', tornado.web.StaticFileHandler, {
-            'path': STATIC_PATH
-        })
     ]
 
-    with open(os.path.join(STATIC_PATH, 'index.html'), 'r') as f:
+    with open(os.path.join(STATIC_PATH, 'ui.jinja2'), 'r') as f:
         SwaggerHomeHandler.SWAGGER_HOME_TEMPLATE = (
             f.read().replace(
-                '##SWAGGER_CONFIG##', '{}{}'.format(api_base_url.lstrip('/'), _swagger_def_url)
-            ).replace(
-                '##STATIC_PATH##',
-                '{}{}'.format(api_base_url.lstrip('/'), statics_path)
+                '{{ SWAGGER_SCHEMA }}',
+                json.dumps(swagger_schema)
             )
         )

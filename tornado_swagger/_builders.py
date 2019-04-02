@@ -1,6 +1,5 @@
 import collections
 import inspect
-import json
 import os
 import re
 import typing
@@ -139,6 +138,6 @@ def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
     swagger['definitions'] = swagger_models
 
     for route in routes:
-        swagger["paths"][_format_handler_path(route)].update(_build_doc_from_func_doc(route.target))
+        swagger['paths'][_format_handler_path(route)].update(_build_doc_from_func_doc(route.target))
 
-    return json.dumps(swagger)
+    return swagger

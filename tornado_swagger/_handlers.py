@@ -11,10 +11,3 @@ class SwaggerHomeHandler(TornadoHandler):
 
     def get(self):
         self.write(self.SWAGGER_HOME_TEMPLATE)
-
-
-class SwaggerDefHandler(TornadoHandler):
-    SWAGGER_DEF_CONTENT = ''
-
-    def get(self):
-        self.write(self.SWAGGER_DEF_CONTENT)

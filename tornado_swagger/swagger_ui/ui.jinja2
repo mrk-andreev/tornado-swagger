@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Swagger UI</title>
+</head>
+<body class="swagger-section">
+<div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+<style>
+    html {
+        box-sizing: border-box;
+        overflow: -moz-scrollbars-vertical;
+        overflow-y: scroll;
+    }
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
+    }
+
+    body {
+        margin: 0;
+        background: #fafafa;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.22.0/swagger-ui.css">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.22.0/swagger-ui-bundle.js'
+        type='text/javascript'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.22.0/swagger-ui-standalone-preset.js'
+        type='text/javascript'></script>
+<script type="text/javascript">
+    window.SWAGGER_CONFIG_URL = "##SWAGGER_CONFIG##";
+    (function () {
+        window.onload = function () {
+            window.ui = new SwaggerUIBundle({
+                spec: {{ SWAGGER_SCHEMA }},
+                dom_id: "#swagger-ui-container",
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                validatorUrl: "https://validator.swagger.io/validator",
+            });
+        };
+    })();
+</script>
+</body>
+</html>
