@@ -34,7 +34,7 @@
     (function () {
         window.onload = function () {
             window.ui = new SwaggerUIBundle({
-                url: SWAGGER_CONFIG_URL,
+                spec: {{ SWAGGER_SCHEMA }},
                 dom_id: "#swagger-ui-container",
                 deepLinking: true,
                 presets: [
