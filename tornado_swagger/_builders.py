@@ -58,6 +58,16 @@ def _build_doc_from_func_doc(handler):
     return out
 
 
+def _try_extract_docs(method_handler):
+    try:
+        return inspect.getfullargspec(method_handler).args[1:]
+    except TypeError:  # unsupported callable
+        if hasattr(method_handler, '__wrapped__'):
+            return _try_extract_docs(method_handler.__wrapped__)
+        else:
+            return []
+
+
 def _extract_parameters_names(handler, parameters_count):
     if parameters_count == 0:
         return []
@@ -66,7 +76,7 @@ def _extract_parameters_names(handler, parameters_count):
 
     for method in handler.SUPPORTED_METHODS:
         method_handler = getattr(handler, method.lower())
-        args = inspect.getfullargspec(method_handler).args[1:]
+        args = _try_extract_docs(method_handler)
 
         if len(args) > 0:
             for i, arg in enumerate(args):
