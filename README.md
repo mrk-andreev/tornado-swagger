@@ -49,7 +49,7 @@ Installation
 What's tornado-swagger
 ----------------------
 
-tornado-swagger is a plugin for tornado server that allow to document APIs using Swagger show the Swagger-ui console.
+tornado-swagger is a plugin for tornado server that allow to document APIs using Swagger show the Swagger-ui console (default url /api/doc).
 
 ![](https://github.com/mrk-andreev/tornado-swagger/blob/master/docs/wiki__swagger_single_endpoint.png)
 
