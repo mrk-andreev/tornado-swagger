@@ -113,6 +113,7 @@ def nesteddict2yaml(d, indent=10, result=''):
 
 def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
                                 *,
+                                host,
                                 api_base_url,
                                 description,
                                 api_version,
@@ -140,6 +141,7 @@ def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
                 version=api_version,
                 title=title,
                 contact=contact,
+                host=host,
                 base_path=api_base_url,
                 security_definitions=security_definitions,
             )

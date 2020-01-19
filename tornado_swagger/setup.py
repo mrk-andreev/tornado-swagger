@@ -12,6 +12,7 @@ STATIC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'swagger_u
 
 def export_swagger(routes: typing.List[tornado.web.URLSpec],
                    *,
+                   host: str = '',
                    api_base_url: str = '/',
                    description: str = 'Swagger API definition',
                    api_version: str = '1.0.0',
@@ -22,6 +23,7 @@ def export_swagger(routes: typing.List[tornado.web.URLSpec],
                    ):
     return generate_doc_from_endpoints(
         routes,
+        host=host,
         api_base_url=api_base_url,
         description=description,
         api_version=api_version,
@@ -34,6 +36,7 @@ def export_swagger(routes: typing.List[tornado.web.URLSpec],
 
 def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                   *,
+                  host: str = '',
                   swagger_url: str = '/api/doc',
                   api_base_url: str = '/',
                   description: str = 'Swagger API definition',
@@ -45,6 +48,7 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                   ):
     swagger_schema = generate_doc_from_endpoints(
         routes,
+        host=host,
         api_base_url=api_base_url,
         description=description,
         api_version=api_version,
