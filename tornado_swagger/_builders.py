@@ -59,6 +59,10 @@ def _build_doc_from_func_doc(handler):
 
 
 def _try_extract_docs(method_handler):
+    
+    while hasattr(method_handler, '__wrapped__'):
+        method_handler = method_handler.__wrapped__
+
     try:
         return inspect.getfullargspec(method_handler).args[1:]
     except TypeError:  # unsupported callable
