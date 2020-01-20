@@ -84,6 +84,7 @@ What's new?
 
 ## Version 1.2.1
 - Support wrapped methods
+- Remove jinja2 from deps
 
 ### Version 1.2.0
 - Replace local js/css to cdn
