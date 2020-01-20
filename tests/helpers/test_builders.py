@@ -1,8 +1,12 @@
+import functools
+
 import tornado.web
 
 from tornado_swagger._builders import _build_doc_from_func_doc
 from tornado_swagger._builders import _extract_parameters_names
 from tornado_swagger._builders import _format_handler_path
+from tornado_swagger._builders import _try_extract_args
+from tornado_swagger._builders import _try_extract_doc
 from tornado_swagger._builders import extract_swagger_docs
 from tornado_swagger._builders import generate_doc_from_endpoints
 from tornado_swagger._builders import SWAGGER_DOC_SEPARATOR
@@ -126,3 +130,59 @@ def test__format_handler_path():
 
     route_path = _format_handler_path(tornado.web.url(r'/api/(\w+)/(\w+)/(\w+)', HandlerWithMultipleParameter))
     assert route_path == '/api/{posts_id}/{post_id2}/{post_id3}'
+
+
+def test_try_extract_args():
+    def method_handler(self, arg_name):
+        raise NotImplementedError()
+
+    args = _try_extract_args(method_handler)
+    assert 'arg_name' in args
+
+
+def test_try_extract_decorated_args():
+    def dummy_decorator(f):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            return f(*args, **kwargs)
+
+        return wrapper
+
+    @dummy_decorator
+    def method_handler(self, arg_name):
+        raise NotImplementedError()
+
+    args = _try_extract_args(method_handler)
+    assert 'arg_name' in args
+
+
+def test_try_extract_doc():
+    def method_handler(self, arg_name):
+        """
+        ---
+        Foo
+        """
+        raise NotImplementedError()
+
+    doc = _try_extract_doc(method_handler)
+    assert 'Foo' in doc
+
+
+def test_try_extract_decorated_doc():
+    def dummy_decorator(f):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            return f(*args, **kwargs)
+
+        return wrapper
+
+    @dummy_decorator
+    def method_handler(self, arg_name):
+        """
+        ---
+        Foo
+        """
+        raise NotImplementedError()
+
+    doc = _try_extract_doc(method_handler)
+    assert 'Foo' in doc
