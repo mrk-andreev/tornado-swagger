@@ -36,7 +36,7 @@ Documentation |  https://github.com/mrk-andreev/tornado-swagger/wiki
 ------------- | -------------------------------------------------
 Code | https://github.com/mrk-andreev/tornado-swagger
 Issues | https://github.com/mrk-andreev/tornado-swagger/issues
-Python version | Python 3.4 and above
+Python version | Python 3.5 and above
 Swagger Language Specification | https://swagger.io/specification/v2/
 
 Installation
@@ -80,6 +80,10 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 
 What's new?
 -----------
+
+
+## Version 1.2.1
+- Support wrapped methods
 
 ### Version 1.2.0
 - Replace local js/css to cdn

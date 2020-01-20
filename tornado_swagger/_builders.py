@@ -43,12 +43,16 @@ def extract_swagger_docs(endpoint_doc):
     return end_point_swagger_doc
 
 
+def _try_extract_doc(func):
+    return inspect.unwrap(func).__doc__
+
+
 def _build_doc_from_func_doc(handler):
     out = {}
 
     for method in handler.SUPPORTED_METHODS:
         method = method.lower()
-        doc = getattr(handler, method).__doc__
+        doc = _try_extract_doc(getattr(handler, method))
 
         if doc is not None and '---' in doc:
             out.update({
@@ -58,14 +62,8 @@ def _build_doc_from_func_doc(handler):
     return out
 
 
-def _try_extract_docs(method_handler):
-    try:
-        return inspect.getfullargspec(method_handler).args[1:]
-    except TypeError:  # unsupported callable
-        if hasattr(method_handler, '__wrapped__'):
-            return _try_extract_docs(method_handler.__wrapped__)
-        else:
-            return []
+def _try_extract_args(method_handler):
+    return inspect.getfullargspec(inspect.unwrap(method_handler)).args[1:]
 
 
 def _extract_parameters_names(handler, parameters_count):
@@ -76,7 +74,7 @@ def _extract_parameters_names(handler, parameters_count):
 
     for method in handler.SUPPORTED_METHODS:
         method_handler = getattr(handler, method.lower())
-        args = _try_extract_docs(method_handler)
+        args = _try_extract_args(method_handler)
 
         if len(args) > 0:
             for i, arg in enumerate(args):
