@@ -64,7 +64,7 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
         tornado.web.url('{}/'.format(_base_swagger_url), SwaggerHomeHandler),
     ]
 
-    with open(os.path.join(STATIC_PATH, 'ui.jinja2'), 'r') as f:
+    with open(os.path.join(STATIC_PATH, 'ui.html'), 'r') as f:
         SwaggerHomeHandler.SWAGGER_HOME_TEMPLATE = (
             f.read().replace(
                 '{{ SWAGGER_SCHEMA }}',
