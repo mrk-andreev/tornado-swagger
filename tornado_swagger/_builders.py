@@ -6,8 +6,6 @@ import typing
 
 import tornado.web
 import yaml
-from jinja2 import BaseLoader
-from jinja2 import Environment
 
 SWAGGER_TEMPLATE = os.path.abspath(
     os.path.join(os.path.dirname(__file__), 'templates', 'swagger.yaml')
@@ -123,24 +121,23 @@ def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
             break
     cleaned_description = '    '.join(description[_start_desc:].splitlines())
 
-    # Load base Swagger template
-    jinja2_env = Environment(loader=BaseLoader())
-    jinja2_env.filters['nesteddict2yaml'] = nesteddict2yaml
-
-    with open(SWAGGER_TEMPLATE, 'r') as f:
-        swagger_base = (
-            jinja2_env.from_string(f.read()).render(
-                description=cleaned_description,
-                version=api_version,
-                title=title,
-                contact=contact,
-                base_path=api_base_url,
-                security_definitions=security_definitions,
-            )
-        )
-
     # The Swagger OBJ
-    swagger = yaml.safe_load(swagger_base)
+    swagger = {
+        'swagger': '2.0',
+        'info': {
+            'description': cleaned_description,
+            'version': api_version,
+            'title': title
+        },
+        'basePath': api_base_url,
+    }
+    if contact:
+        swagger['info']['contact'] = {
+            'name': contact
+        }
+    if security_definitions:
+        swagger['securityDefinitions'] = nesteddict2yaml(security_definitions)
+
     swagger['schemes'] = schemes
     swagger['paths'] = collections.defaultdict(dict)
     swagger['definitions'] = swagger_models
