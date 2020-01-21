@@ -6,9 +6,14 @@ python:
 
 install:
   - pip install -r requirements-dev.txt
+  - pip install codecov
+  - pip freeze
 
 script:
   - python -m pytest .
+
+after_success:
+  - codecov
 
 deploy:
   distributions: "sdist bdist_wheel"
