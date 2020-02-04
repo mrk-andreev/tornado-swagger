@@ -30,6 +30,7 @@ def extract_swagger_docs(endpoint_doc):
 
     # Build JSON YAML Obj
     try:
+        endpoint_doc = endpoint_doc.replace('\t', '    ')  # fix windows tabs bug
         end_point_swagger_doc = yaml.safe_load(endpoint_doc)
         if not isinstance(end_point_swagger_doc, dict):
             raise yaml.YAMLError()
