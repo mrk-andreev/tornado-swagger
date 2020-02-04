@@ -81,6 +81,9 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 What's new?
 -----------
 
+### Version 1.2.3
+
+- Fix `\t` bug in Windows (https://github.com/mrk-andreev/tornado-swagger/issues/21)
 
 ## Version 1.2.1
 - Support wrapped methods
