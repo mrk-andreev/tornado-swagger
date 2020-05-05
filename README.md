@@ -81,6 +81,10 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 What's new?
 -----------
 
+### Version 1.2.4
+
+- Fix "index out of range issue for StaticFileHandler" (https://github.com/mrk-andreev/tornado-swagger/issues/23)  
+
 ### Version 1.2.3
 
 - Fix `\t` bug in Windows (https://github.com/mrk-andreev/tornado-swagger/issues/21)
