@@ -132,6 +132,7 @@ class Application(tornado.web.Application):
     _routes = [
         tornado.web.url(r'/api/posts', PostsHandler),
         tornado.web.url(r'/api/posts/(\w+)', PostsDetailsHandler),
+        tornado.web.url(r'/static/(.*)', tornado.web.StaticFileHandler, {'path': '/tmp'}),
     ]
 
     def __init__(self):
