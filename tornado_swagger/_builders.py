@@ -77,7 +77,7 @@ def _extract_parameters_names(handler, parameters_count):
 
         if len(args) > 0:
             for i, arg in enumerate(args):
-                if set(arg) != {'_'}:
+                if set(arg) != {'_'} and i < len(parameters):
                     parameters[i] = arg
 
     return parameters
