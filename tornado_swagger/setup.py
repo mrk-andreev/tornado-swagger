@@ -59,7 +59,7 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                     else swagger_url)
     _base_swagger_url = _swagger_url.rstrip('/')
 
-    routes += [
+    routes[:0] = [
         tornado.web.url(_swagger_url, SwaggerHomeHandler),
         tornado.web.url('{}/'.format(_base_swagger_url), SwaggerHomeHandler),
     ]
@@ -71,3 +71,4 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                 json.dumps(swagger_schema)
             )
         )
+
