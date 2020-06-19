@@ -71,4 +71,3 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                 json.dumps(swagger_schema)
             )
         )
-
