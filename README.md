@@ -81,6 +81,12 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 What's new?
 -----------
 
+### Version 1.2.5
+
+- Update dependencies
+    - `PyYAML==5.3.1` fix vulnerabilities
+    - `pytest==6.0.1`, `pytest-flake8==1.0.6` fix test crash 
+
 ### Version 1.2.4
 
 - Fix "index out of range issue for StaticFileHandler" (https://github.com/mrk-andreev/tornado-swagger/issues/23)  
