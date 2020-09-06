@@ -1,2 +1,2 @@
 tornado>=5.0
-PyYAML
+PyYAML==5.3.1
