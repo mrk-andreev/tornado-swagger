@@ -41,7 +41,8 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                   title: str = 'Swagger API',
                   contact: str = '',
                   schemes: list = None,
-                  security_definitions: dict = None
+                  security_definitions: dict = None,
+                  display_models: bool = True
                   ):
     swagger_schema = generate_doc_from_endpoints(
         routes,
@@ -53,6 +54,7 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
         schemes=schemes,
         security_definitions=security_definitions,
     )
+    display_mod = -1 if not display_models else 1
 
     _swagger_url = ('/{}'.format(swagger_url)
                     if not swagger_url.startswith('/')
@@ -69,5 +71,8 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
             f.read().replace(
                 '{{ SWAGGER_SCHEMA }}',
                 json.dumps(swagger_schema)
+            ).replace(
+                '{{ DISPLAY_MODELS }}',
+                str(display_mod)
             )
         )

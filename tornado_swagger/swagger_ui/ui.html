@@ -35,6 +35,7 @@
         window.onload = function () {
             window.ui = new SwaggerUIBundle({
                 spec: {{ SWAGGER_SCHEMA }},
+                defaultModelsExpandDepth: {{ DISPLAY_MODELS }},
                 dom_id: "#swagger-ui-container",
                 deepLinking: true,
                 presets: [
