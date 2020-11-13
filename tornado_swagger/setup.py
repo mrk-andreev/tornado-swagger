@@ -54,7 +54,6 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
         schemes=schemes,
         security_definitions=security_definitions,
     )
-    display_mod = -1 if not display_models else 1
 
     _swagger_url = ('/{}'.format(swagger_url)
                     if not swagger_url.startswith('/')
@@ -73,6 +72,6 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                 json.dumps(swagger_schema)
             ).replace(
                 '{{ DISPLAY_MODELS }}',
-                str(display_mod)
+                str(0 if not display_models else 1)
             )
         )
