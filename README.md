@@ -7,9 +7,9 @@ tornado-swagger
 ![GitHub](https://img.shields.io/github/license/mrk-andreev/tornado-swagger.svg)
 
 
-| PyPI                                        | Anaconda                                      |
-|----------------------------------------------|----------------------------------------------|
-| [![PyPI][pypi_image]][pypi_link] | [![Anaconda][anaconda_image]][anaconda_link] |
+| PyPI                                        |
+|----------------------------------------------|
+| [![PyPI][pypi_image]][pypi_link] |
 
 
 [pypi_link]: https://pypi.org/project/tornado-swagger/
@@ -36,14 +36,13 @@ Documentation |  https://github.com/mrk-andreev/tornado-swagger/wiki
 ------------- | -------------------------------------------------
 Code | https://github.com/mrk-andreev/tornado-swagger
 Issues | https://github.com/mrk-andreev/tornado-swagger/issues
-Python version | Python 3.5 and above
+Python version | Python 3.5, 3.6, 3.7, 3.8, nightly
 Swagger Language Specification | https://swagger.io/specification/v2/
 
 Installation
 ----------------------
 
     pip install -U tornado-swagger
-    conda install -c mrk.andreev tornado-swagger 
 
 
 What's tornado-swagger
@@ -85,6 +84,7 @@ What's new?
 
 - Add display_models param to setup (`defaultModelsExpandDepth`). Thanks to [@Sloknatos](https://github.com/Sloknatos)
 - Fix swagger-ui bundle [CVE-2019-17495](https://github.com/mrk-andreev/tornado-swagger/issues/35)
+- Specify supported python versions: 3.5, 3.6, 3.7, 3.8, nightly
 
 ### Version 1.2.6
 
