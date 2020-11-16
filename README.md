@@ -81,6 +81,10 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 What's new?
 -----------
 
+### Version 1.2.7
+
+- Add display_models param to setup (`defaultModelsExpandDepth`). Thanks to [@Sloknatos](https://github.com/Sloknatos).
+
 ### Version 1.2.6
 
 - Fix issue with `StaticFileHandler` (https://github.com/mrk-andreev/tornado-swagger/pull/28)
