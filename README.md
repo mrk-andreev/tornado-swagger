@@ -83,7 +83,8 @@ What's new?
 
 ### Version 1.2.7
 
-- Add display_models param to setup (`defaultModelsExpandDepth`). Thanks to [@Sloknatos](https://github.com/Sloknatos).
+- Add display_models param to setup (`defaultModelsExpandDepth`). Thanks to [@Sloknatos](https://github.com/Sloknatos)
+- Fix swagger-ui bundle [CVE-2019-17495](https://github.com/mrk-andreev/tornado-swagger/issues/35)
 
 ### Version 1.2.6
 
