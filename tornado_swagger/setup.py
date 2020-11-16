@@ -72,6 +72,6 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                 json.dumps(swagger_schema)
             ).replace(
                 '{{ DISPLAY_MODELS }}',
-                str(0 if not display_models else 1)
+                str(-1 if not display_models else 1)
             )
         )
