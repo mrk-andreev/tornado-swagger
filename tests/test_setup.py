@@ -13,12 +13,12 @@ from tornado_swagger.setup import setup_swagger
 
 SERVER_START_TIMEOUT = 3
 
-SWAGGER_URL = '/api/doc'
+SWAGGER_URL = "/api/doc"
 
 
 def find_free_port():
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
-        s.bind(('', 0))
+        s.bind(("", 0))
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         return s.getsockname()[1]
 
@@ -41,9 +41,7 @@ class ExampleHandler(tornado.web.RequestHandler):
 
 
 class Application(tornado.web.Application):
-    routes = [
-        tornado.web.url(r'/api/example', ExampleHandler)
-    ]
+    routes = [tornado.web.url(r"/api/example", ExampleHandler)]
 
     def __init__(self):
         setup_swagger(
@@ -77,8 +75,8 @@ def server():
 
 def test_swagger_setup_integration(server):
     client = tornado.httpclient.HTTPClient()
-    response = client.fetch('http://localhost:{0}{1}'.format(server, SWAGGER_URL))
-    assert 'Swagger UI' in response.body.decode()
+    response = client.fetch("http://localhost:{0}{1}".format(server, SWAGGER_URL))
+    assert "Swagger UI" in response.body.decode()
 
 
 @pytest.fixture()

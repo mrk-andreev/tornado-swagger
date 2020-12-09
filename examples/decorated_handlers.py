@@ -54,27 +54,23 @@ class ExampleHandler(tornado.web.RequestHandler):
         "201":
           description: successful operation
         """
-        self.write({
-            'organization': organization
-        })
+        self.write({"organization": organization})
 
 
 class Application(tornado.web.Application):
     _routes = [
-        tornado.web.url(r'/api/example/(.*)', ExampleHandler, name='example'),
+        tornado.web.url(r"/api/example/(.*)", ExampleHandler, name="example"),
     ]
 
     def __init__(self):
-        settings = {
-            'debug': True
-        }
+        settings = {"debug": True}
 
         setup_swagger(self._routes)
         super(Application, self).__init__(self._routes, **settings)
 
 
-if __name__ == '__main__':
-    tornado.options.define('port', default='8080', help='Port to listen on')
+if __name__ == "__main__":
+    tornado.options.define("port", default="8080", help="Port to listen on")
     tornado.options.parse_command_line()
 
     app = Application()

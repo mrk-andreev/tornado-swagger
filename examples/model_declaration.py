@@ -130,36 +130,34 @@ class PostModel:
 
 class Application(tornado.web.Application):
     _routes = [
-        tornado.web.url(r'/api/posts', PostsHandler),
-        tornado.web.url(r'/api/posts/(\w+)', PostsDetailsHandler),
-        tornado.web.url(r'/static/(.*)', tornado.web.StaticFileHandler, {'path': '/tmp'}),
+        tornado.web.url(r"/api/posts", PostsHandler),
+        tornado.web.url(r"/api/posts/(\w+)", PostsDetailsHandler),
+        tornado.web.url(
+            r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "/tmp"}
+        ),
     ]
 
     def __init__(self):
-        settings = {
-            'debug': True
-        }
+        settings = {"debug": True}
 
-        setup_swagger(self._routes,
-                      swagger_url='/doc',
-                      api_base_url='/',
-                      description='',
-                      api_version='1.0.0',
-                      title='Journal API',
-                      contact='name@domain',
-                      schemes=['https'],
-                      security_definitions={
-                          'ApiKeyAuth': {
-                              'type': 'apiKey',
-                              'in': 'header',
-                              'name': 'X-API-Key'
-                          }
-                      })
+        setup_swagger(
+            self._routes,
+            swagger_url="/doc",
+            api_base_url="/",
+            description="",
+            api_version="1.0.0",
+            title="Journal API",
+            contact="name@domain",
+            schemes=["https"],
+            security_definitions={
+                "ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
+            },
+        )
         super(Application, self).__init__(self._routes, **settings)
 
 
-if __name__ == '__main__':
-    tornado.options.define('port', default='8080', help='Port to listen on')
+if __name__ == "__main__":
+    tornado.options.define("port", default="8080", help="Port to listen on")
     tornado.options.parse_command_line()
 
     app = Application()

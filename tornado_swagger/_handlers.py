@@ -7,7 +7,7 @@ class TornadoHandler(tornado.web.RequestHandler):
 
 
 class SwaggerHomeHandler(TornadoHandler):
-    SWAGGER_HOME_TEMPLATE = ''
+    SWAGGER_HOME_TEMPLATE = ""
 
     def get(self):
         self.write(self.SWAGGER_HOME_TEMPLATE)

@@ -19,6 +19,7 @@ install:
 
 script:
   - python -m pytest .
+  - black --check .
 
 after_success:
   - codecov
