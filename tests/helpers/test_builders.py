@@ -91,7 +91,8 @@ def test_generate_doc_from_each_end_point():
         title='',
         contact='',
         security_definitions=None,
-        schemes=[]
+        schemes=[],
+        security=None
     )
     assert docs
 
