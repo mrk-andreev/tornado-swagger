@@ -38,7 +38,7 @@ Documentation |  https://github.com/mrk-andreev/tornado-swagger/wiki
 ------------- | -------------------------------------------------
 Code | https://github.com/mrk-andreev/tornado-swagger
 Issues | https://github.com/mrk-andreev/tornado-swagger/issues
-Python version | Python 3.5, 3.6, 3.7, 3.8, nightly
+Python version | Python 3.6, 3.7, 3.8, nightly
 Swagger Language Specification | https://swagger.io/specification/v2/
 
 Installation
@@ -88,6 +88,7 @@ What's new?
 - Add black code formatter
 - Update swagger-ui library to 3.37.2
 - Add integrity attribute to script / link tags
+- Remove Python 3.5 support
 
 ### Version 1.2.7
 
