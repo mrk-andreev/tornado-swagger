@@ -11,26 +11,28 @@ tornado-swagger
 |----------------------------------------------|
 | [![PyPI][pypi_image]][pypi_link] |
 
-
 [pypi_link]: https://pypi.org/project/tornado-swagger/
+
 [pypi_image]: https://img.shields.io/pypi/v/tornado-swagger.svg
 
 [anaconda_link]: https://anaconda.org/mrk.andreev/tornado-swagger
+
 [anaconda_image]: https://anaconda.org/mrk.andreev/tornado-swagger/badges/version.svg
-
-
 
 | Linux                                        | Windows                                      |
 |----------------------------------------------|----------------------------------------------|
 | [![TravisCI][travisci_image]][travisci_link] | [![AppVeyor][appveyor_image]][appveyor_link] |
 
 [travisci_link]: https://travis-ci.org/mrk-andreev/tornado-swagger
+
 [travisci_image]: https://travis-ci.org/mrk-andreev/tornado-swagger.svg?branch=master
 
 [appveyor_link]: https://ci.appveyor.com/project/mrk-andreev/tornado-swagger/branch/master
+
 [appveyor_image]: https://img.shields.io/appveyor/ci/mrk-andreev/tornado-swagger/master.svg
 
-*tornado-swagger: Swagger API Documentation builder for tornado server. Inspired by [aiohttp-swagger](https://github.com/cr0hn/aiohttp-swagger) package (based on this package sources).*
+*tornado-swagger: Swagger API Documentation builder for tornado server. Inspired
+by [aiohttp-swagger](https://github.com/cr0hn/aiohttp-swagger) package (based on this package sources).*
 
 Documentation |  https://github.com/mrk-andreev/tornado-swagger/wiki
 ------------- | -------------------------------------------------
@@ -44,11 +46,11 @@ Installation
 
     pip install -U tornado-swagger
 
-
 What's tornado-swagger
 ----------------------
 
-tornado-swagger is a plugin for tornado server that allow to document APIs using Swagger show the Swagger-ui console (default url /api/doc).
+tornado-swagger is a plugin for tornado server that allow to document APIs using Swagger show the Swagger-ui console (
+default url /api/doc).
 
 ![](https://github.com/mrk-andreev/tornado-swagger/blob/master/docs/wiki__swagger_single_endpoint.png)
 
@@ -83,7 +85,9 @@ What's new?
 ### Version 1.2.8
 
 - Add `security` to setup. Thanks to [@daominwang](https://github.com/daominwang)
-- Add black code formatter ()
+- Add black code formatter
+- Update swagger-ui library to 3.37.2
+- Add integrity attribute to script / link tags
 
 ### Version 1.2.7
 
@@ -99,21 +103,23 @@ What's new?
 
 - Update dependencies
     - `PyYAML==5.3.1` fix vulnerabilities
-    - `pytest==6.0.1`, `pytest-flake8==1.0.6` fix test crash 
+    - `pytest==6.0.1`, `pytest-flake8==1.0.6` fix test crash
 
 ### Version 1.2.4
 
-- Fix "index out of range issue for StaticFileHandler" (https://github.com/mrk-andreev/tornado-swagger/issues/23)  
+- Fix "index out of range issue for StaticFileHandler" (https://github.com/mrk-andreev/tornado-swagger/issues/23)
 
 ### Version 1.2.3
 
 - Fix `\t` bug in Windows (https://github.com/mrk-andreev/tornado-swagger/issues/21)
 
 ## Version 1.2.1
+
 - Support wrapped methods
 - Remove jinja2 from deps
 
 ### Version 1.2.0
+
 - Replace local js/css to cdn
 - Remove static files serving
 
@@ -125,11 +131,10 @@ What's new?
 - `export_swagger(routes)` as public function
 - Update frontend
 
-
 ### Version 1.0.0
 
 - First version released
 
-
 ## License
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmrk-andreev%2Ftornado-swagger.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmrk-andreev%2Ftornado-swagger?ref=badge_large)
