@@ -19,7 +19,7 @@ def export_swagger(routes: typing.List[tornado.web.URLSpec],
                    contact: str = '',
                    schemes: list = None,
                    security_definitions: dict = None,
-                   security: list = None,
+                   security: list = None
                    ):
     return generate_doc_from_endpoints(
         routes,
