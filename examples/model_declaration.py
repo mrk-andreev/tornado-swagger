@@ -133,7 +133,7 @@ class Application(tornado.web.Application):
         tornado.web.url(r"/api/posts", PostsHandler),
         tornado.web.url(r"/api/posts/(\w+)", PostsDetailsHandler),
         tornado.web.url(
-            r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "/tmp"}
+            r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "/var/www"}
         ),
     ]
 
