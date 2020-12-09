@@ -32,7 +32,7 @@ class AuthHandler(tornado.web.RequestHandler):
               description: the auth key return
         """
         x_api_key = self.request.headers.get('X-API-Key')
-        self.finish(f"the x-api-key request get is {x_api_key}")
+        self.finish("the x-api-key request get is %s" % x_api_key)
 
 
 class Application(tornado.web.Application):
