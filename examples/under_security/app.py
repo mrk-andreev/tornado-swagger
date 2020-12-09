@@ -52,13 +52,11 @@ class ExampleHandler(tornado.web.RequestHandler):
 
 class Application(tornado.web.Application):
     _routes = [
-        tornado.web.url(r'/api/example', ExampleHandler, name='example'),
+        tornado.web.url(r"/api/example", ExampleHandler, name="example"),
     ]
 
     def __init__(self):
-        settings = {
-            'debug': True
-        }
+        settings = {"debug": True}
         from tornado_swagger.setup import setup_swagger
 
         setup_swagger(self._routes)

@@ -7,7 +7,7 @@ def _save_model_doc(model):
     global swagger_models
     doc = model.__doc__
 
-    if doc is not None and '---' in doc:
+    if doc is not None and "---" in doc:
         swagger_models[model.__name__] = extract_swagger_docs(doc)
 
 

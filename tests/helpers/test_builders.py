@@ -11,9 +11,14 @@ from tornado_swagger._builders import extract_swagger_docs
 from tornado_swagger._builders import generate_doc_from_endpoints
 from tornado_swagger._builders import SWAGGER_DOC_SEPARATOR
 
-INVALID_ENDPOINT_DOC = SWAGGER_DOC_SEPARATOR + """
+INVALID_ENDPOINT_DOC = (
+    SWAGGER_DOC_SEPARATOR
+    + """
 tag"""
-ENDPOINT_DOC = SWAGGER_DOC_SEPARATOR + """
+)
+ENDPOINT_DOC = (
+    SWAGGER_DOC_SEPARATOR
+    + """
 tags:
   - Example
 summary: Create user
@@ -54,16 +59,17 @@ responses:
 "201":
   description: successful operation
 """
+)
 
 
 def test_extract_swagger_docs():
     docs = extract_swagger_docs(ENDPOINT_DOC)
-    assert 'Invalid Swagger' not in docs['tags']
+    assert "Invalid Swagger" not in docs["tags"]
 
 
 def test_invalid_extract_swagger_docs():
     docs = extract_swagger_docs(INVALID_ENDPOINT_DOC)
-    assert 'Invalid Swagger' in docs['tags']
+    assert "Invalid Swagger" in docs["tags"]
 
 
 class ExampleHandler(tornado.web.RequestHandler):
@@ -74,25 +80,25 @@ class ExampleHandler(tornado.web.RequestHandler):
 def test_build_doc_from_func_doc():
     ExampleHandler.get.__doc__ = ENDPOINT_DOC
     docs = _build_doc_from_func_doc(ExampleHandler)
-    assert 'Invalid Swagger' not in docs['get']['tags']
+    assert "Invalid Swagger" not in docs["get"]["tags"]
 
 
 def test_generate_doc_from_each_end_point():
     ExampleHandler.get.__doc__ = ENDPOINT_DOC
     routes = [
-        tornado.web.url(r'/api/example', ExampleHandler, name='example'),
+        tornado.web.url(r"/api/example", ExampleHandler, name="example"),
     ]
 
     docs = generate_doc_from_endpoints(
         routes,
-        api_base_url='/',
-        description='',
-        api_version='',
-        title='',
-        contact='',
+        api_base_url="/",
+        description="",
+        api_version="",
+        title="",
+        contact="",
         security_definitions=None,
         schemes=[],
-        security=None
+        security=None,
     )
     assert docs
 
@@ -112,7 +118,7 @@ def test_extract_parameters_names_signle_parameter():
             pass
 
     parameters = _extract_parameters_names(HandlerWithSingleParameter, 1)
-    assert parameters == ['posts_id']
+    assert parameters == ["posts_id"]
 
 
 def test_extract_parameters_names_multiple():
@@ -121,7 +127,7 @@ def test_extract_parameters_names_multiple():
             pass
 
     parameters = _extract_parameters_names(HandlerWithMultipleParameter, 3)
-    assert parameters == ['posts_id', 'post_id2', 'post_id3']
+    assert parameters == ["posts_id", "post_id2", "post_id3"]
 
 
 def test__format_handler_path():
@@ -129,8 +135,10 @@ def test__format_handler_path():
         def get(self, posts_id, post_id2, post_id3):
             pass
 
-    route_path = _format_handler_path(tornado.web.url(r'/api/(\w+)/(\w+)/(\w+)', HandlerWithMultipleParameter))
-    assert route_path == '/api/{posts_id}/{post_id2}/{post_id3}'
+    route_path = _format_handler_path(
+        tornado.web.url(r"/api/(\w+)/(\w+)/(\w+)", HandlerWithMultipleParameter)
+    )
+    assert route_path == "/api/{posts_id}/{post_id2}/{post_id3}"
 
 
 def test_try_extract_args():
@@ -138,7 +146,7 @@ def test_try_extract_args():
         raise NotImplementedError()
 
     args = _try_extract_args(method_handler)
-    assert 'arg_name' in args
+    assert "arg_name" in args
 
 
 def test_try_extract_decorated_args():
@@ -154,7 +162,7 @@ def test_try_extract_decorated_args():
         raise NotImplementedError()
 
     args = _try_extract_args(method_handler)
-    assert 'arg_name' in args
+    assert "arg_name" in args
 
 
 def test_try_extract_doc():
@@ -166,7 +174,7 @@ def test_try_extract_doc():
         raise NotImplementedError()
 
     doc = _try_extract_doc(method_handler)
-    assert 'Foo' in doc
+    assert "Foo" in doc
 
 
 def test_try_extract_decorated_doc():
@@ -186,4 +194,4 @@ def test_try_extract_decorated_doc():
         raise NotImplementedError()
 
     doc = _try_extract_doc(method_handler)
-    assert 'Foo' in doc
+    assert "Foo" in doc
