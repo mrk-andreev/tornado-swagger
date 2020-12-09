@@ -5,7 +5,7 @@ tornado-swagger
 ![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/mrk-andreev/tornado-swagger.svg)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmrk-andreev%2Ftornado-swagger.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmrk-andreev%2Ftornado-swagger?ref=badge_shield)
 ![GitHub](https://img.shields.io/github/license/mrk-andreev/tornado-swagger.svg)
-
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 | PyPI                                        |
 |----------------------------------------------|
@@ -79,6 +79,11 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 
 What's new?
 -----------
+
+### Version 1.2.8
+
+- Add `security` to setup. Thanks to [@daominwang](https://github.com/daominwang)
+- Add black code formatter ()
 
 ### Version 1.2.7
 
