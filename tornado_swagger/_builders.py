@@ -112,7 +112,8 @@ def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
                                 title,
                                 contact,
                                 schemes,
-                                security_definitions):
+                                security_definitions,
+                                security):
     from tornado_swagger.model import swagger_models
     # Clean description
     _start_desc = 0
@@ -137,7 +138,10 @@ def generate_doc_from_endpoints(routes: typing.List[tornado.web.URLSpec],
             'name': contact
         }
     if security_definitions:
-        swagger['securityDefinitions'] = nesteddict2yaml(security_definitions)
+        swagger['securityDefinitions'] = security_definitions
+
+    if security:
+        swagger['security'] = security
 
     swagger['schemes'] = schemes
     swagger['paths'] = collections.defaultdict(dict)

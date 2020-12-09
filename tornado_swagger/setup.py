@@ -18,7 +18,8 @@ def export_swagger(routes: typing.List[tornado.web.URLSpec],
                    title: str = 'Swagger API',
                    contact: str = '',
                    schemes: list = None,
-                   security_definitions: dict = None
+                   security_definitions: dict = None,
+                   security: list = None,
                    ):
     return generate_doc_from_endpoints(
         routes,
@@ -29,6 +30,7 @@ def export_swagger(routes: typing.List[tornado.web.URLSpec],
         contact=contact,
         schemes=schemes,
         security_definitions=security_definitions,
+        security=security
     )
 
 
@@ -42,6 +44,7 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
                   contact: str = '',
                   schemes: list = None,
                   security_definitions: dict = None,
+                  security: list = None,
                   display_models: bool = True
                   ):
     swagger_schema = generate_doc_from_endpoints(
@@ -53,6 +56,7 @@ def setup_swagger(routes: typing.List[tornado.web.URLSpec],
         contact=contact,
         schemes=schemes,
         security_definitions=security_definitions,
+        security=security
     )
 
     _swagger_url = ('/{}'.format(swagger_url)
