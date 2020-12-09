@@ -60,16 +60,17 @@ responses:
   description: successful operation
 """
 )
+INVALID_SWAGGER_TEXT = "Invalid Swagger"
 
 
 def test_extract_swagger_docs():
     docs = extract_swagger_docs(ENDPOINT_DOC)
-    assert "Invalid Swagger" not in docs["tags"]
+    assert INVALID_SWAGGER_TEXT not in docs["tags"]
 
 
 def test_invalid_extract_swagger_docs():
     docs = extract_swagger_docs(INVALID_ENDPOINT_DOC)
-    assert "Invalid Swagger" in docs["tags"]
+    assert INVALID_SWAGGER_TEXT in docs["tags"]
 
 
 class ExampleHandler(tornado.web.RequestHandler):
@@ -80,7 +81,7 @@ class ExampleHandler(tornado.web.RequestHandler):
 def test_build_doc_from_func_doc():
     ExampleHandler.get.__doc__ = ENDPOINT_DOC
     docs = _build_doc_from_func_doc(ExampleHandler)
-    assert "Invalid Swagger" not in docs["get"]["tags"]
+    assert INVALID_SWAGGER_TEXT not in docs["get"]["tags"]
 
 
 def test_generate_doc_from_each_end_point():
