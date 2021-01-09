@@ -146,7 +146,9 @@ def generate_doc_from_endpoints(
     swagger["definitions"] = swagger_models
 
     for route in routes:
-        for method_name, method_description in _build_doc_from_func_doc(route.target).items():
+        for method_name, method_description in _build_doc_from_func_doc(
+            route.target
+        ).items():
             swagger["paths"][_format_handler_path(route, method_name)].update(
                 {method_name: method_description}
             )
