@@ -82,6 +82,10 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 What's new?
 -----------
 
+### Version 1.2.9
+
+- Fix handler args name parsing (`examples/args_recognize.py`). Thanks to [@reubinoff]
+
 ### Version 1.2.8
 
 - Add `security` to setup. Thanks to [@daominwang](https://github.com/daominwang)

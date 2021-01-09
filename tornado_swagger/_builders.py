@@ -63,27 +63,26 @@ def _try_extract_args(method_handler):
     return inspect.getfullargspec(inspect.unwrap(method_handler)).args[1:]
 
 
-def _extract_parameters_names(handler, parameters_count):
+def _extract_parameters_names(handler, parameters_count, method):
     if parameters_count == 0:
         return []
 
     parameters = ["{?}" for _ in range(parameters_count)]
 
-    for method in handler.SUPPORTED_METHODS:
-        method_handler = getattr(handler, method.lower())
-        args = _try_extract_args(method_handler)
+    method_handler = getattr(handler, method.lower())
+    args = _try_extract_args(method_handler)
 
-        if len(args) > 0:
-            for i, arg in enumerate(args):
-                if set(arg) != {"_"} and i < len(parameters):
-                    parameters[i] = arg
+    if len(args) > 0:
+        for i, arg in enumerate(args):
+            if set(arg) != {"_"} and i < len(parameters):
+                parameters[i] = arg
 
     return parameters
 
 
-def _format_handler_path(route):
+def _format_handler_path(route, method):
     brackets_regex = re.compile(r"\(.*?\)")
-    parameters = _extract_parameters_names(route.target, route.regex.groups)
+    parameters = _extract_parameters_names(route.target, route.regex.groups, method)
     route_pattern = route.regex.pattern
 
     for i, entity in enumerate(brackets_regex.findall(route_pattern)):
@@ -147,8 +146,11 @@ def generate_doc_from_endpoints(
     swagger["definitions"] = swagger_models
 
     for route in routes:
-        swagger["paths"][_format_handler_path(route)].update(
-            _build_doc_from_func_doc(route.target)
-        )
+        for method_name, method_description in _build_doc_from_func_doc(
+            route.target
+        ).items():
+            swagger["paths"][_format_handler_path(route, method_name)].update(
+                {method_name: method_description}
+            )
 
     return swagger

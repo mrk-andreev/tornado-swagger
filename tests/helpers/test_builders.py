@@ -109,7 +109,7 @@ def test_extract_parameters_names_empty_parameter():
         def get(self):
             pass
 
-    parameters = _extract_parameters_names(HandlerWithEmptyParameter, 0)
+    parameters = _extract_parameters_names(HandlerWithEmptyParameter, 0, method="get")
     assert parameters == []
 
 
@@ -118,7 +118,7 @@ def test_extract_parameters_names_signle_parameter():
         def get(self, posts_id):
             pass
 
-    parameters = _extract_parameters_names(HandlerWithSingleParameter, 1)
+    parameters = _extract_parameters_names(HandlerWithSingleParameter, 1, method="get")
     assert parameters == ["posts_id"]
 
 
@@ -127,7 +127,9 @@ def test_extract_parameters_names_multiple():
         def get(self, posts_id, post_id2, post_id3):
             pass
 
-    parameters = _extract_parameters_names(HandlerWithMultipleParameter, 3)
+    parameters = _extract_parameters_names(
+        HandlerWithMultipleParameter, 3, method="get"
+    )
     assert parameters == ["posts_id", "post_id2", "post_id3"]
 
 
@@ -137,7 +139,8 @@ def test__format_handler_path():
             pass
 
     route_path = _format_handler_path(
-        tornado.web.url(r"/api/(\w+)/(\w+)/(\w+)", HandlerWithMultipleParameter)
+        tornado.web.url(r"/api/(\w+)/(\w+)/(\w+)", HandlerWithMultipleParameter),
+        method="get",
     )
     assert route_path == "/api/{posts_id}/{post_id2}/{post_id3}"
 
