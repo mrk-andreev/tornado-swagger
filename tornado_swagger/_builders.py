@@ -14,9 +14,9 @@ SWAGGER_DOC_SEPARATOR = "---"
 
 
 def _extract_swagger_definition(endpoint_doc):
+    """Extract swagger definition after SWAGGER_DOC_SEPARATOR"""
     endpoint_doc = endpoint_doc.splitlines()
 
-    # Find Swagger start point in doc
     for i, doc_line in enumerate(endpoint_doc):
         if SWAGGER_DOC_SEPARATOR in doc_line:
             end_point_swagger_start = i + 1
@@ -25,7 +25,8 @@ def _extract_swagger_definition(endpoint_doc):
     return "\n".join(endpoint_doc)
 
 
-def extract_swagger_docs(endpoint_doc):
+def build_swagger_docs(endpoint_doc):
+    """Build swagger doc based on endpoint docstring"""
     endpoint_doc = _extract_swagger_definition(endpoint_doc)
 
     # Build JSON YAML Obj
@@ -43,6 +44,7 @@ def extract_swagger_docs(endpoint_doc):
 
 
 def _try_extract_doc(func):
+    """Extract docstring from origin function removing decorators"""
     return inspect.unwrap(func).__doc__
 
 
@@ -54,16 +56,18 @@ def _build_doc_from_func_doc(handler):
         doc = _try_extract_doc(getattr(handler, method))
 
         if doc is not None and "---" in doc:
-            out.update({method: extract_swagger_docs(doc)})
+            out.update({method: build_swagger_docs(doc)})
 
     return out
 
 
 def _try_extract_args(method_handler):
+    """Extract method args from origin function removing decorators"""
     return inspect.getfullargspec(inspect.unwrap(method_handler)).args[1:]
 
 
 def _extract_parameters_names(handler, parameters_count, method):
+    """Extract parameters names from handler"""
     if parameters_count == 0:
         return []
 
@@ -101,6 +105,30 @@ def nesteddict2yaml(d, indent=10, result=""):
     return result
 
 
+def _clean_description(description):
+    """Remove empty space from description begin"""
+    _start_desc = 0
+    for i, word in enumerate(description):
+        if word != "\n":
+            _start_desc = i
+            break
+    return "    ".join(description[_start_desc:].splitlines())
+
+
+def _extract_paths(routes):
+    paths = collections.defaultdict(dict)
+
+    for route in routes:
+        for method_name, method_description in _build_doc_from_func_doc(
+            route.target
+        ).items():
+            paths[_format_handler_path(route, method_name)].update(
+                {method_name: method_description}
+            )
+
+    return paths
+
+
 def generate_doc_from_endpoints(
     routes: typing.List[tornado.web.URLSpec],
     *,
@@ -113,44 +141,26 @@ def generate_doc_from_endpoints(
     security_definitions,
     security
 ):
-    from tornado_swagger.model import swagger_models
+    """Generate doc based on routes"""
+    from tornado_swagger.model import export_swagger_models
 
-    # Clean description
-    _start_desc = 0
-    for i, word in enumerate(description):
-        if word != "\n":
-            _start_desc = i
-            break
-    cleaned_description = "    ".join(description[_start_desc:].splitlines())
-
-    # The Swagger OBJ
-    swagger = {
+    swagger_spec = {
         "swagger": "2.0",
         "info": {
-            "description": cleaned_description,
-            "version": api_version,
             "title": title,
+            "description": _clean_description(description),
+            "version": api_version,
         },
         "basePath": api_base_url,
+        "schemes": schemes,
+        "definitions": export_swagger_models(),
+        "paths": _extract_paths(routes),
     }
     if contact:
-        swagger["info"]["contact"] = {"name": contact}
+        swagger_spec["info"]["contact"] = {"name": contact}
     if security_definitions:
-        swagger["securityDefinitions"] = security_definitions
-
+        swagger_spec["securityDefinitions"] = security_definitions
     if security:
-        swagger["security"] = security
+        swagger_spec["security"] = security
 
-    swagger["schemes"] = schemes
-    swagger["paths"] = collections.defaultdict(dict)
-    swagger["definitions"] = swagger_models
-
-    for route in routes:
-        for method_name, method_description in _build_doc_from_func_doc(
-            route.target
-        ).items():
-            swagger["paths"][_format_handler_path(route, method_name)].update(
-                {method_name: method_description}
-            )
-
-    return swagger
+    return swagger_spec

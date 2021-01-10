@@ -7,7 +7,7 @@ from tornado_swagger._builders import _extract_parameters_names
 from tornado_swagger._builders import _format_handler_path
 from tornado_swagger._builders import _try_extract_args
 from tornado_swagger._builders import _try_extract_doc
-from tornado_swagger._builders import extract_swagger_docs
+from tornado_swagger._builders import build_swagger_docs
 from tornado_swagger._builders import generate_doc_from_endpoints
 from tornado_swagger._builders import SWAGGER_DOC_SEPARATOR
 
@@ -64,12 +64,12 @@ INVALID_SWAGGER_TEXT = "Invalid Swagger"
 
 
 def test_extract_swagger_docs():
-    docs = extract_swagger_docs(ENDPOINT_DOC)
+    docs = build_swagger_docs(ENDPOINT_DOC)
     assert INVALID_SWAGGER_TEXT not in docs["tags"]
 
 
 def test_invalid_extract_swagger_docs():
-    docs = extract_swagger_docs(INVALID_ENDPOINT_DOC)
+    docs = build_swagger_docs(INVALID_ENDPOINT_DOC)
     assert INVALID_SWAGGER_TEXT in docs["tags"]
 
 
