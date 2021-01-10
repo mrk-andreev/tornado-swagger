@@ -22,6 +22,7 @@ def export_swagger(
     security_definitions: dict = None,
     security: list = None,
 ):
+    """Export swagger schema as dict"""
     return generate_doc_from_endpoints(
         routes,
         api_base_url=api_base_url,
@@ -49,6 +50,7 @@ def setup_swagger(
     security: list = None,
     display_models: bool = True,
 ):
+    """Inject swagger ui to application routes"""
     swagger_schema = generate_doc_from_endpoints(
         routes,
         api_base_url=api_base_url,
