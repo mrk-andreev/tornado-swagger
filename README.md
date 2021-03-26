@@ -82,6 +82,10 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 What's new?
 -----------
 
+### Version 1.2.10
+
+- Update PyYAML version to 5.4 (Fix for CVE-2020-14343)
+
 ### Version 1.2.9
 
 - Fix handler args name parsing (`examples/args_recognize.py`). Thanks to [@reubinoff]
