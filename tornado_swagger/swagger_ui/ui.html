@@ -34,11 +34,10 @@
         integrity="sha512-ZUCBiUmCK1/IkMDPuv1XiTEx60crsiZenBCtumb3OVgNrTFFtkGQeWXy6qHTR1RoLr4FTS+GrTWLKnyiT5uyAg=="
         crossorigin="anonymous"></script>
 <script type="text/javascript">
-    window.SWAGGER_CONFIG_URL = "##SWAGGER_CONFIG##";
     (function () {
-        window.onload = function () {
-            window.ui = new SwaggerUIBundle({
-                spec: {{ SWAGGER_SCHEMA }},
+        addEventListener('load', function () {
+            window.APP = new SwaggerUIBundle({
+                url: "{{ SWAGGER_URL }}",
                 defaultModelsExpandDepth: {{ DISPLAY_MODELS }},
                 dom_id: "#swagger-ui-container",
                 deepLinking: true,
@@ -52,7 +51,7 @@
                 layout: "StandaloneLayout",
                 validatorUrl: "https://validator.swagger.io/validator",
             });
-        };
+        });
     })();
 </script>
 </body>

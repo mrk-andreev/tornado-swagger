@@ -9,14 +9,14 @@ from app import Application
 credentials = {"user1": "pass1"}
 
 
-class SwaggerHomeHandlerSecure(BasicAuthMixin, _handlers.SwaggerHomeHandler):
+class SwaggerHomeHandlerSecure(BasicAuthMixin, _handlers.SwaggerUiHandler):
     def prepare(self):
         self.get_authenticated_user(
             check_credentials_func=credentials.get, realm="Protected"
         )
 
 
-_handlers.SwaggerHomeHandler = SwaggerHomeHandlerSecure
+_handlers.SwaggerUiHandler = SwaggerHomeHandlerSecure
 
 if __name__ == "__main__":
     tornado.options.define("port", default="8080", help="Port to listen on")

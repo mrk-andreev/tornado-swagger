@@ -55,6 +55,9 @@ default url /api/doc).
 ![](https://github.com/mrk-andreev/tornado-swagger/blob/master/docs/wiki__swagger_single_endpoint.png)
 
 ```python
+import tornado.web
+
+
 class PostsDetailsHandler(tornado.web.RequestHandler):
     def get(self, posts_id):
         """
@@ -81,6 +84,10 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 
 What's new?
 -----------
+
+### Version 1.2.11
+
+- Fix link to spec swagger.json [issue](https://github.com/mrk-andreev/tornado-swagger/issues/47).
 
 ### Version 1.2.10
 
@@ -122,7 +129,7 @@ What's new?
 
 - Fix `\t` bug in Windows (https://github.com/mrk-andreev/tornado-swagger/issues/21)
 
-## Version 1.2.1
+### Version 1.2.1
 
 - Support wrapped methods
 - Remove jinja2 from deps
