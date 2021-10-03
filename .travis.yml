@@ -17,11 +17,10 @@ install:
   - pip freeze
 
 script:
-  - python -m pytest .
-  - black --check .
+  - make lint
+  - make test
 
 after_success:
-  - codecov
   - sonar-scanner
 
 deploy:

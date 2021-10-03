@@ -8,8 +8,7 @@ import tornado.httpclient
 import tornado.ioloop
 import tornado.web
 
-from tornado_swagger.setup import export_swagger
-from tornado_swagger.setup import setup_swagger
+from tornado_swagger.setup import export_swagger, setup_swagger
 
 SERVER_START_TIMEOUT = 3
 

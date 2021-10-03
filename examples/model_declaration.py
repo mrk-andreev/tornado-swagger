@@ -132,9 +132,7 @@ class Application(tornado.web.Application):
     _routes = [
         tornado.web.url(r"/api/posts", PostsHandler),
         tornado.web.url(r"/api/posts/(\w+)", PostsDetailsHandler),
-        tornado.web.url(
-            r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "/var/www"}
-        ),
+        tornado.web.url(r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "/var/www"}),
     ]
 
     def __init__(self):
@@ -149,9 +147,7 @@ class Application(tornado.web.Application):
             title="Journal API",
             contact="name@domain",
             schemes=["https"],
-            security_definitions={
-                "ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
-            },
+            security_definitions={"ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}},
         )
         super(Application, self).__init__(self._routes, **settings)
 
