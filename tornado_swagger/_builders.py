@@ -1,3 +1,4 @@
+# pylint: disable=R0401
 import collections
 import inspect
 import os
@@ -7,9 +8,7 @@ import typing
 import tornado.web
 import yaml
 
-SWAGGER_TEMPLATE = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "templates", "swagger.yaml")
-)
+SWAGGER_TEMPLATE = os.path.abspath(os.path.join(os.path.dirname(__file__), "templates", "swagger.yaml"))
 SWAGGER_DOC_SEPARATOR = "---"
 
 
@@ -35,12 +34,12 @@ def build_swagger_docs(endpoint_doc):
         end_point_swagger_doc = yaml.safe_load(endpoint_doc)
         if not isinstance(end_point_swagger_doc, dict):
             raise yaml.YAMLError()
+        return end_point_swagger_doc
     except yaml.YAMLError:
-        end_point_swagger_doc = {
+        return {
             "description": "Swagger document could not be loaded from docstring",
             "tags": ["Invalid Swagger"],
         }
-    return end_point_swagger_doc
 
 
 def _try_extract_doc(func):
@@ -76,10 +75,9 @@ def _extract_parameters_names(handler, parameters_count, method):
     method_handler = getattr(handler, method.lower())
     args = _try_extract_args(method_handler)
 
-    if len(args) > 0:
-        for i, arg in enumerate(args):
-            if set(arg) != {"_"} and i < len(parameters):
-                parameters[i] = arg
+    for i, arg in enumerate(args):
+        if set(arg) != {"_"} and i < len(parameters):
+            parameters[i] = arg
 
     return parameters
 
@@ -119,12 +117,8 @@ def _extract_paths(routes):
     paths = collections.defaultdict(dict)
 
     for route in routes:
-        for method_name, method_description in _build_doc_from_func_doc(
-            route.target
-        ).items():
-            paths[_format_handler_path(route, method_name)].update(
-                {method_name: method_description}
-            )
+        for method_name, method_description in _build_doc_from_func_doc(route.target).items():
+            paths[_format_handler_path(route, method_name)].update({method_name: method_description})
 
     return paths
 
@@ -142,7 +136,7 @@ def generate_doc_from_endpoints(
     security
 ):
     """Generate doc based on routes"""
-    from tornado_swagger.model import export_swagger_models
+    from tornado_swagger.model import export_swagger_models  # pylint: disable=C0415
 
     swagger_spec = {
         "swagger": "2.0",

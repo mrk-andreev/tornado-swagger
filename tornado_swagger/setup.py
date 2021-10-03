@@ -1,11 +1,10 @@
-import json
 import os
 import typing
 
 import tornado.web
 
 from tornado_swagger._builders import generate_doc_from_endpoints
-from tornado_swagger._handlers import SwaggerHomeHandler
+from tornado_swagger._handlers import SwaggerSpecHandler, SwaggerUiHandler
 
 STATIC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "swagger_ui"))
 
@@ -63,19 +62,19 @@ def setup_swagger(
         security=security,
     )
 
-    _swagger_url = (
-        "/{}".format(swagger_url) if not swagger_url.startswith("/") else swagger_url
-    )
-    _base_swagger_url = _swagger_url.rstrip("/")
+    _swagger_ui_url = "/{}".format(swagger_url) if not swagger_url.startswith("/") else swagger_url
+    _base_swagger_ui_url = _swagger_ui_url.rstrip("/")
+    _swagger_spec_url = "{}/swagger.json".format(_swagger_ui_url)
 
     routes[:0] = [
-        tornado.web.url(_swagger_url, SwaggerHomeHandler),
-        tornado.web.url("{}/".format(_base_swagger_url), SwaggerHomeHandler),
+        tornado.web.url(_swagger_ui_url, SwaggerUiHandler),
+        tornado.web.url("{}/".format(_base_swagger_ui_url), SwaggerUiHandler),
+        tornado.web.url(_swagger_spec_url, SwaggerSpecHandler),
     ]
 
+    SwaggerSpecHandler.SWAGGER_SPEC = swagger_schema
+
     with open(os.path.join(STATIC_PATH, "ui.html"), "r") as f:
-        SwaggerHomeHandler.SWAGGER_HOME_TEMPLATE = (
-            f.read()
-            .replace("{{ SWAGGER_SCHEMA }}", json.dumps(swagger_schema))
-            .replace("{{ DISPLAY_MODELS }}", str(-1 if not display_models else 1))
+        SwaggerUiHandler.SWAGGER_HOME_TEMPLATE = (
+            f.read().replace("{{ SWAGGER_URL }}", _swagger_spec_url).replace("{{ DISPLAY_MODELS }}", str(-1 if not display_models else 1))
         )

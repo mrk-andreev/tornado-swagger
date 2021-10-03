@@ -2,14 +2,16 @@ import functools
 
 import tornado.web
 
-from tornado_swagger._builders import _build_doc_from_func_doc
-from tornado_swagger._builders import _extract_parameters_names
-from tornado_swagger._builders import _format_handler_path
-from tornado_swagger._builders import _try_extract_args
-from tornado_swagger._builders import _try_extract_doc
-from tornado_swagger._builders import build_swagger_docs
-from tornado_swagger._builders import generate_doc_from_endpoints
-from tornado_swagger._builders import SWAGGER_DOC_SEPARATOR
+from tornado_swagger._builders import (
+    SWAGGER_DOC_SEPARATOR,
+    _build_doc_from_func_doc,
+    _extract_parameters_names,
+    _format_handler_path,
+    _try_extract_args,
+    _try_extract_doc,
+    build_swagger_docs,
+    generate_doc_from_endpoints,
+)
 
 INVALID_ENDPOINT_DOC = (
     SWAGGER_DOC_SEPARATOR
@@ -127,9 +129,7 @@ def test_extract_parameters_names_multiple():
         def get(self, posts_id, post_id2, post_id3):
             pass
 
-    parameters = _extract_parameters_names(
-        HandlerWithMultipleParameter, 3, method="get"
-    )
+    parameters = _extract_parameters_names(HandlerWithMultipleParameter, 3, method="get")
     assert parameters == ["posts_id", "post_id2", "post_id3"]
 
 

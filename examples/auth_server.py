@@ -51,9 +51,7 @@ class Application(tornado.web.Application):
             api_version="1.0.0",
             title="Journal API",
             contact="name@domain",
-            security_definitions={
-                "ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
-            },
+            security_definitions={"ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}},
             security=[{"ApiKeyAuth": []}],
         )
         super(Application, self).__init__(self._routes, **settings)
