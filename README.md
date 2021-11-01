@@ -38,8 +38,8 @@ Documentation |  https://github.com/mrk-andreev/tornado-swagger/wiki
 ------------- | -------------------------------------------------
 Code | https://github.com/mrk-andreev/tornado-swagger
 Issues | https://github.com/mrk-andreev/tornado-swagger/issues
-Python version | Python 3.6, 3.7, 3.8, nightly
-Swagger Language Specification | https://swagger.io/specification/v2/
+Python version | Python 3.6, 3.7, 3.8, 3.9, nightly
+OpenAPI Language Specification | https://swagger.io/specification/
 
 Installation
 ----------------------

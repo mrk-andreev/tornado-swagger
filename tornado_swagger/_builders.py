@@ -139,7 +139,7 @@ def generate_doc_from_endpoints(
     from tornado_swagger.model import export_swagger_models  # pylint: disable=C0415
 
     swagger_spec = {
-        "swagger": "2.0",
+        "openapi": "3.0.3",
         "info": {
             "title": title,
             "description": _clean_description(description),
