@@ -3,6 +3,7 @@ import tornado.options
 import tornado.web
 
 from tornado_swagger.model import register_swagger_model
+from tornado_swagger.parameter import register_swagger_parameter
 from tornado_swagger.setup import setup_swagger
 
 
@@ -55,11 +56,7 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
         produces:
         - application/json
         parameters:
-        -   name: posts_id
-            in: path
-            description: ID of post to return
-            required: true
-            type: string
+        -   $ref: '#/parameters/PostId'
         responses:
             200:
               description: list of posts
@@ -77,11 +74,7 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
         produces:
         - application/json
         parameters:
-        -   name: posts_id
-            in: path
-            description: ID of post to edit
-            required: true
-            type: string
+        -   $ref: '#/parameters/PostId'
         -   in: body
             name: body
             description: post data
@@ -100,12 +93,20 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
         produces:
         - application/json
         parameters:
-        -   name: posts_id
-            in: path
-            description: ID of post to delete
-            required: true
-            type: string
+        -   $ref: '#/parameters/PostId'
         """
+
+
+@register_swagger_parameter
+class PostId:
+    """
+    ---
+    name: posts_id
+    in: path
+    description: ID of post
+    required: true
+    type: string
+    """
 
 
 @register_swagger_model
