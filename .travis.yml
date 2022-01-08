@@ -5,9 +5,6 @@ python:
   - "3.8"
   - "nightly"
 
-install:
-  - pip install -r requirements-dev.txt
-
 deploy:
   distributions: "sdist bdist_wheel"
   skip_existing: true
