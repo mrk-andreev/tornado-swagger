@@ -5,23 +5,8 @@ python:
   - "3.8"
   - "nightly"
 
-addons:
-  sonarcloud:
-    organization: "mrk-andreev-github"
-    token:
-      secure: "sNArFUFxNECE1K1B5HBefCVPEJ5nfuyI6e+jOBIITUTkOkwHZ4li0N67Qj6IVOk60SiD4SORpIRYxollVvVuxrTqewwRzor8BmOZFjJzSJ5hIl0lRfEFVUiXwMTzR22DrXZF2SHgm1ClssBU7XOV3SZL64zFfdd/CZ8lpATr4bEjChnKOJCyan/G6TtK0AgtlbipZzXlkOKTYQ3IpGf8stdzt9pM3JbohL44GAlRgF+Xcq4IH85hX+b0qLfRazlbnp7QaNbGdCe8Sc2TwYO2Zc1NTUlNz0RrAzT+hrvGz84bpCruTnuG7ikG/AnaRMi05X3hzcX3yb3ZzJMOCgkyv3YkYSD7K1oQQvsrdTtKn6PH+4iAKCraFOlp3i/aGxrBimA/0+t0FlFDl12zjsC98PBX1hQhi0hK26LGJn4IMnOUszqGWJZgUr7Cyh76oB5Zupjlwc4Xplw3v2rug0QziAOSVDZH5/o0bEGKKSZr1mUDYHZEBoa789fOMavBtXp/LMs3Sgr/IBpCWj+opGI7j2og4h/N7X0W9Cs4oaOSXQt78oh8Cm9oqoE2OnSrLv8r+RVfhcLn44QOkQ/S7NZvMg7OTGDVKhrrTSD0SGC9oyFGgCP1T6ziA4TadqL/XFSk9zJp4LDagBtaGgzgl06dJtV5Xq6AoBTZ8FsWfDeGLUU="
-
 install:
   - pip install -r requirements-dev.txt
-  - pip install codecov
-  - pip freeze
-
-script:
-  - make lint
-  - make test
-
-after_success:
-  - sonar-scanner
 
 deploy:
   distributions: "sdist bdist_wheel"
