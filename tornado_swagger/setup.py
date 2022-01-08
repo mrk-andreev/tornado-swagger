@@ -1,3 +1,4 @@
+"""Setup"""
 import os
 import typing
 
@@ -5,6 +6,7 @@ import tornado.web
 
 from tornado_swagger._builders import generate_doc_from_endpoints
 from tornado_swagger._handlers import SwaggerSpecHandler, SwaggerUiHandler
+from tornado_swagger.const import API_SWAGGER_2
 
 STATIC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "swagger_ui"))
 
@@ -20,6 +22,7 @@ def export_swagger(
     schemes: list = None,
     security_definitions: dict = None,
     security: list = None,
+    api_definition_version: str = API_SWAGGER_2
 ):
     """Export swagger schema as dict"""
     return generate_doc_from_endpoints(
@@ -32,6 +35,7 @@ def export_swagger(
         schemes=schemes,
         security_definitions=security_definitions,
         security=security,
+        api_definition_version=api_definition_version,
     )
 
 
@@ -48,6 +52,7 @@ def setup_swagger(
     security_definitions: dict = None,
     security: list = None,
     display_models: bool = True,
+    api_definition_version: str = API_SWAGGER_2
 ):
     """Inject swagger ui to application routes"""
     swagger_schema = generate_doc_from_endpoints(
@@ -60,6 +65,7 @@ def setup_swagger(
         schemes=schemes,
         security_definitions=security_definitions,
         security=security,
+        api_definition_version=api_definition_version,
     )
 
     _swagger_ui_url = "/{}".format(swagger_url) if not swagger_url.startswith("/") else swagger_url

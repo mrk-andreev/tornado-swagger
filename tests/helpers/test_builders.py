@@ -1,5 +1,6 @@
 import functools
 
+import pytest
 import tornado.web
 
 from tornado_swagger._builders import (
@@ -10,6 +11,7 @@ from tornado_swagger._builders import (
     _try_extract_args,
     _try_extract_doc,
     build_swagger_docs,
+    doc_builders,
     generate_doc_from_endpoints,
 )
 
@@ -86,7 +88,8 @@ def test_build_doc_from_func_doc():
     assert INVALID_SWAGGER_TEXT not in docs["get"]["tags"]
 
 
-def test_generate_doc_from_each_end_point():
+@pytest.mark.parametrize("api_definition_version", doc_builders.keys())
+def test_generate_doc_from_each_end_point(api_definition_version):
     ExampleHandler.get.__doc__ = ENDPOINT_DOC
     routes = [
         tornado.web.url(r"/api/example", ExampleHandler, name="example"),
@@ -102,6 +105,7 @@ def test_generate_doc_from_each_end_point():
         security_definitions=None,
         schemes=[],
         security=None,
+        api_definition_version=api_definition_version,
     )
     assert docs
 
