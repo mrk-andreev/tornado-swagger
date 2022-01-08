@@ -116,6 +116,10 @@ class PostModel:
 What's new?
 -----------
 
+### Version 1.4.0
+
+- Add experimental openapi support (api_definition_version = API_OPENAPI_3; examples/model_and_param_declaration_openapi3.py) 
+
 ### Version 1.3.0
 
 - Add swagger parameter ref (@register_swagger_parameter). Thanks to [@Weltraumpenner](https://github.com/Weltraumpenner)
