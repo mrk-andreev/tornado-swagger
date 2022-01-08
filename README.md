@@ -56,6 +56,8 @@ default url /api/doc).
 
 ```python
 import tornado.web
+from tornado_swagger.model import register_swagger_model
+from tornado_swagger.parameter import register_swagger_parameter
 
 
 class PostsDetailsHandler(tornado.web.RequestHandler):
@@ -69,21 +71,54 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
         produces:
         - application/json
         parameters:
-        -   name: posts_id
-            in: path
-            description: ID of post to return
-            required: true
-            type: string
+        -   $ref: '#/parameters/PostId'
         responses:
             200:
               description: list of posts
               schema:
                 $ref: '#/definitions/PostModel'
         """
+
+
+@register_swagger_parameter
+class PostId:
+    """
+    ---
+    name: posts_id
+    in: path
+    description: ID of post
+    required: true
+    type: string
+    """
+
+
+@register_swagger_model
+class PostModel:
+    """
+    ---
+    type: object
+    description: Post model representation
+    properties:
+        id:
+            type: integer
+            format: int64
+        title:
+            type: string
+        text:
+            type: string
+        is_visible:
+            type: boolean
+            default: true
+    """
+
 ```
 
 What's new?
 -----------
+
+### Version 1.3.0
+
+- Add swagger parameter ref (@register_swagger_parameter). Thanks to [@Weltraumpenner](https://github.com/Weltraumpenner)
 
 ### Version 1.2.11
 
