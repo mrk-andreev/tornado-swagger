@@ -137,6 +137,7 @@ def generate_doc_from_endpoints(
 ):
     """Generate doc based on routes"""
     from tornado_swagger.model import export_swagger_models  # pylint: disable=C0415
+    from tornado_swagger.parameter import export_swagger_parameters
 
     swagger_spec = {
         "swagger": "2.0",
@@ -148,6 +149,7 @@ def generate_doc_from_endpoints(
         "basePath": api_base_url,
         "schemes": schemes,
         "definitions": export_swagger_models(),
+        "parameters": export_swagger_parameters(),
         "paths": _extract_paths(routes),
     }
     if contact:
