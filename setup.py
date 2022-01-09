@@ -28,7 +28,7 @@ CLASSIFIERS = [
 with open(join(dirname(__file__), "requirements.txt")) as f:
     PACKAGES_REQUIRED = f.read().splitlines()
 
-with open(join(dirname(__file__), "README.md")) as f:
+with open(join(dirname(__file__), "README.rst")) as f:
     LONG_DESCRIPTION = f.read()
 
 
@@ -57,7 +57,6 @@ def setup_package():
         include_package_data=True,
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
-        long_description_content_type="text/markdown",
         classifiers=CLASSIFIERS,
         tests_require=["pytest"],
         cmdclass=dict(test=PyTest),
