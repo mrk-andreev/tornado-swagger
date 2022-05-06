@@ -113,6 +113,13 @@ APIs using Swagger show the Swagger-ui console ( default url /api/doc).
 What’s new?
 -----------
 
+
+Version 1.4.2
+~~~~~~~~~~~~~
+
+- Add encoding to setup.py open
+
+
 Version 1.4.1
 ~~~~~~~~~~~~~
 
