@@ -28,7 +28,7 @@ by*\ `aiohttp-swagger <https://github.com/cr0hn/aiohttp-swagger>`__\ *package
 +--------------------------------+-------------------------------------------------------+
 | Issues                         | https://github.com/mrk-andreev/tornado-swagger/issues |
 +--------------------------------+-------------------------------------------------------+
-| Python version                 | Python 3.6, 3.7, 3.8, 3.9, 3.10, 3.11 nightly         |
+| Python version                 |      Python 3.7, 3.8, 3.9, 3.10, 3.11 nightly         |
 +--------------------------------+-------------------------------------------------------+
 | Swagger Language Specification | https://swagger.io/specification/v2/                  |
 +--------------------------------+-------------------------------------------------------+
@@ -108,6 +108,13 @@ APIs using Swagger show the Swagger-ui console ( default url /api/doc).
 
 What’s new?
 -----------
+
+Version 1.4.5
+~~~~~~~~~~~~~
+
+- Specify supported python versions: 3.7, 3.8, 3.9, 3.10, 3.11 and nightly
+- Remove `flake8-eradicate`, `flake8-isort` from dev deps
+- Create `make test-in-docker` for test application across python versions
 
 
 Version 1.4.4
