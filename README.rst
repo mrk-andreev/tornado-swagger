@@ -110,6 +110,11 @@ What’s new?
 -----------
 
 
+Version 1.4.4
+~~~~~~~~~~~~~
+
+- Fix path parsing with groups (skip + warning) [issue-58](https://github.com/mrk-andreev/tornado-swagger/issues/58)
+
 Version 1.4.3
 ~~~~~~~~~~~~~
 
