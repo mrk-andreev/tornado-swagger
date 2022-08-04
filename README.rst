@@ -110,6 +110,12 @@ What’s new?
 -----------
 
 
+Version 1.4.3
+~~~~~~~~~~~~~
+
+- Update swagger-ui lib from `3.37.2` to `4.13.2`  [issue-62](https://github.com/mrk-andreev/tornado-swagger/issues/62) [issue-61](https://github.com/mrk-andreev/tornado-swagger/issues/61)
+
+
 Version 1.4.2
 ~~~~~~~~~~~~~
 
