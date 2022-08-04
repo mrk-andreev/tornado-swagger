@@ -13,3 +13,7 @@ lint:
 
 test:
 	python -m pytest .
+
+
+test-in-docker:
+	bash run_tests_in_docker.bash
