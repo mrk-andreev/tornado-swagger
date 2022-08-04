@@ -80,7 +80,7 @@ def setup_swagger(
 
     SwaggerSpecHandler.SWAGGER_SPEC = swagger_schema
 
-    with open(os.path.join(STATIC_PATH, "ui.html"), "r") as f:
+    with open(os.path.join(STATIC_PATH, "ui.html"), "r", encoding="utf-8") as f:
         SwaggerUiHandler.SWAGGER_HOME_TEMPLATE = (
             f.read().replace("{{ SWAGGER_URL }}", _swagger_spec_url).replace("{{ DISPLAY_MODELS }}", str(-1 if not display_models else 1))
         )

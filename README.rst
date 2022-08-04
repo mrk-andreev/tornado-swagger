@@ -21,21 +21,17 @@ Inspired
 by*\ `aiohttp-swagger <https://github.com/cr0hn/aiohttp-swagger>`__\ *package
 (based on this package sources).*
 
-+--------------------------------+------------------------------------+
-| Documentation                  | https://github.co                  |
-|                                | m/mrk-andreev/tornado-swagger/wiki |
-+================================+====================================+
-| Code                           | https://gith                       |
-|                                | ub.com/mrk-andreev/tornado-swagger |
-+--------------------------------+------------------------------------+
-| Issues                         | https://github.com/                |
-|                                | mrk-andreev/tornado-swagger/issues |
-+--------------------------------+------------------------------------+
-| Python version                 | Python 3.6, 3.7, 3.8, nightly      |
-+--------------------------------+------------------------------------+
-| Swagger Language Specification | ht                                 |
-|                                | tps://swagger.io/specification/v2/ |
-+--------------------------------+------------------------------------+
++--------------------------------+-------------------------------------------------------+
+| Documentation                  | https://github.com/mrk-andreev/tornado-swagger/wiki   |
++--------------------------------+-------------------------------------------------------+
+| Code                           | https://github.com/mrk-andreev/tornado-swagger        |
++--------------------------------+-------------------------------------------------------+
+| Issues                         | https://github.com/mrk-andreev/tornado-swagger/issues |
++--------------------------------+-------------------------------------------------------+
+| Python version                 | Python 3.6, 3.7, 3.8, 3.9, 3.10, 3.11 nightly         |
++--------------------------------+-------------------------------------------------------+
+| Swagger Language Specification | https://swagger.io/specification/v2/                  |
++--------------------------------+-------------------------------------------------------+
 
 Installation
 ------------
@@ -112,6 +108,14 @@ APIs using Swagger show the Swagger-ui console ( default url /api/doc).
 
 What’s new?
 -----------
+
+
+Version 1.4.2
+~~~~~~~~~~~~~
+
+- Update dev requirements (fix broken packages)
+- Update PyYAML from `PyYAML==5.4` to `PyYAML>=5.4` [issue-59](https://github.com/mrk-andreev/tornado-swagger/issues/59)
+- Specify encoding in `tornado_swagger/setup.py::open`
 
 Version 1.4.1
 ~~~~~~~~~~~~~
