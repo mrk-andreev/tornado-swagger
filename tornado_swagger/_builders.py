@@ -5,6 +5,7 @@ import inspect
 import os
 import re
 import typing
+import warnings
 
 import tornado.web
 import yaml
@@ -89,8 +90,13 @@ def _format_handler_path(route, method):
     brackets_regex = re.compile(r"\(.*?\)")
     parameters = _extract_parameters_names(route.target, route.regex.groups, method)
     route_pattern = route.regex.pattern
+    brackets = brackets_regex.findall(route_pattern)
 
-    for i, entity in enumerate(brackets_regex.findall(route_pattern)):
+    if len(brackets) != len(parameters):
+        warnings.warn("Illegal route. route.regex.groups does not match all parameters. Route = " + str(route))
+        return None
+
+    for i, entity in enumerate(brackets):
         route_pattern = route_pattern.replace(entity, "{%s}" % parameters[i], 1)
 
     return route_pattern[:-1]
@@ -121,7 +127,11 @@ def _extract_paths(routes):
 
     for route in routes:
         for method_name, method_description in _build_doc_from_func_doc(route.target).items():
-            paths[_format_handler_path(route, method_name)].update({method_name: method_description})
+            path_handler = _format_handler_path(route, method_name)
+            if path_handler is None:
+                continue
+
+            paths[path_handler].update({method_name: method_description})
 
     return paths
 
