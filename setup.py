@@ -29,10 +29,10 @@ CLASSIFIERS = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
-with open(join(dirname(__file__), "requirements.txt")) as f:
+with open(join(dirname(__file__), "requirements.txt"), encoding="utf-8") as f:
     PACKAGES_REQUIRED = f.read().splitlines()
 
-with open(join(dirname(__file__), "README.rst")) as f:
+with open(join(dirname(__file__), "README.rst"), encoding="utf-8") as f:
     LONG_DESCRIPTION = f.read()
 
 
