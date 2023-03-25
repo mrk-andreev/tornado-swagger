@@ -16,8 +16,6 @@ jobs:
         python-version: [ "3.7", "3.8", "3.9", "3.10" ]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Codeball AI Code Review
-        uses: sturdy-dev/codeball-action@v2.6.0
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
