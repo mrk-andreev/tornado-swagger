@@ -158,7 +158,8 @@ class BaseDocBuilder(abc.ABC):
         security_definitions,
         security,
         models,
-        parameters
+        parameters,
+        servers,
     ):
         """Generate docs"""
 
@@ -184,7 +185,8 @@ class Swagger2DocBuilder(BaseDocBuilder):
         security_definitions,
         security,
         models,
-        parameters
+        parameters,
+        servers,
     ):
         """Generate docs"""
         swagger_spec = {
@@ -231,7 +233,8 @@ class OpenApiDocBuilder(BaseDocBuilder):
         security_definitions,
         security,
         models,
-        parameters
+        parameters,
+        servers,
     ):
         """Generate docs"""
         swagger_spec = {
@@ -241,8 +244,7 @@ class OpenApiDocBuilder(BaseDocBuilder):
                 "description": _clean_description(description),
                 "version": api_version,
             },
-            "basePath": api_base_url,
-            "schemes": schemes,
+            "servers": servers,
             "components": {
                 "schemas": models,
                 "parameters": parameters,
@@ -274,7 +276,8 @@ def generate_doc_from_endpoints(
     schemes,
     security_definitions,
     security,
-    api_definition_version
+    api_definition_version,
+    servers,
 ):
     """Generate doc based on routes"""
     from tornado_swagger.model import export_swagger_models
@@ -295,4 +298,5 @@ def generate_doc_from_endpoints(
         security=security,
         models=export_swagger_models(),
         parameters=export_swagger_parameters(),
+        servers=servers,
     )

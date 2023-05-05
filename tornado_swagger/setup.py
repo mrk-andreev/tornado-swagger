@@ -22,8 +22,16 @@ def export_swagger(
     schemes: list = None,
     security_definitions: dict = None,
     security: list = None,
-    api_definition_version: str = API_SWAGGER_2
+    api_definition_version: str = API_SWAGGER_2,
+    servers: typing.Optional[typing.List[typing.Dict[str, str]]] = None,
 ):
+    if servers is None:
+        servers = [
+            {
+                'url': '/',
+                'description': '/'
+            }
+        ]
     """Export swagger schema as dict"""
     return generate_doc_from_endpoints(
         routes,
@@ -36,6 +44,7 @@ def export_swagger(
         security_definitions=security_definitions,
         security=security,
         api_definition_version=api_definition_version,
+        servers=servers,
     )
 
 
@@ -52,8 +61,17 @@ def setup_swagger(
     security_definitions: dict = None,
     security: list = None,
     display_models: bool = True,
-    api_definition_version: str = API_SWAGGER_2
+    api_definition_version: str = API_SWAGGER_2,
+    servers: typing.Optional[typing.List[typing.Dict[str, str]]] = None,
 ):
+    if servers is None:
+        servers = [
+            {
+                'url': '/',
+                'description': '/'
+            }
+        ]
+
     """Inject swagger ui to application routes"""
     swagger_schema = generate_doc_from_endpoints(
         routes,
@@ -66,6 +84,7 @@ def setup_swagger(
         security_definitions=security_definitions,
         security=security,
         api_definition_version=api_definition_version,
+        servers=servers,
     )
 
     _swagger_ui_url = "/{}".format(swagger_url) if not swagger_url.startswith("/") else swagger_url
