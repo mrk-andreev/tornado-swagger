@@ -105,7 +105,7 @@ def test_generate_doc_from_each_end_point(api_definition_version):
         security_definitions=None,
         schemes=[],
         security=None,
-        api_definition_version=api_definition_version
+        api_definition_version=api_definition_version,
     )
     assert docs
 

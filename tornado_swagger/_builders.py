@@ -276,7 +276,7 @@ def generate_doc_from_endpoints(
     schemes,
     security_definitions,
     security,
-    api_definition_version,
+    api_definition_version
 ):
     """Generate doc based on routes"""
     from tornado_swagger.model import export_swagger_models
