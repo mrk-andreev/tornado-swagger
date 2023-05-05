@@ -22,7 +22,7 @@ def export_swagger(
     schemes: list = None,
     security_definitions: dict = None,
     security: list = None,
-    api_definition_version: str = API_SWAGGER_2,
+    api_definition_version: str = API_SWAGGER_2
 ):
     """Export swagger schema as dict"""
     return generate_doc_from_endpoints(
@@ -52,7 +52,7 @@ def setup_swagger(
     security_definitions: dict = None,
     security: list = None,
     display_models: bool = True,
-    api_definition_version: str = API_SWAGGER_2,
+    api_definition_version: str = API_SWAGGER_2
 ):
     """Inject swagger ui to application routes"""
     swagger_schema = generate_doc_from_endpoints(

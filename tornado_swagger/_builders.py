@@ -158,7 +158,7 @@ class BaseDocBuilder(abc.ABC):
         security_definitions,
         security,
         models,
-        parameters,
+        parameters
     ):
         """Generate docs"""
 
@@ -184,7 +184,7 @@ class Swagger2DocBuilder(BaseDocBuilder):
         security_definitions,
         security,
         models,
-        parameters,
+        parameters
     ):
         """Generate docs"""
         swagger_spec = {
@@ -231,7 +231,7 @@ class OpenApiDocBuilder(BaseDocBuilder):
         security_definitions,
         security,
         models,
-        parameters,
+        parameters
     ):
         """Generate docs"""
         swagger_spec = {
