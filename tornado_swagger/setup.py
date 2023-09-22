@@ -52,7 +52,8 @@ def setup_swagger(
     security_definitions: dict = None,
     security: list = None,
     display_models: bool = True,
-    api_definition_version: str = API_SWAGGER_2
+    api_definition_version: str = API_SWAGGER_2,
+    allow_cors: bool = False,
 ):
     """Inject swagger ui to application routes"""
     swagger_schema = generate_doc_from_endpoints(
@@ -79,6 +80,8 @@ def setup_swagger(
     ]
 
     SwaggerSpecHandler.SWAGGER_SPEC = swagger_schema
+    SwaggerSpecHandler.allow_cors = allow_cors
+    SwaggerUiHandler.allow_cors = allow_cors
 
     with open(os.path.join(STATIC_PATH, "ui.html"), "r", encoding="utf-8") as f:
         SwaggerUiHandler.SWAGGER_HOME_TEMPLATE = (
