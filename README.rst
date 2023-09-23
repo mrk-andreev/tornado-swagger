@@ -109,6 +109,13 @@ APIs using Swagger show the Swagger-ui console ( default url /api/doc).
 What’s new?
 -----------
 
+Version 1.5.0
+~~~~~~~~~~~~~
+
+- Add allow_cors option [pull-73](https://github.com/mrk-andreev/tornado-swagger/pull/73) Thanks to
+   [@MarkParker5](https://github.com/MarkParker5)
+
+
 Version 1.4.5
 ~~~~~~~~~~~~~
 
