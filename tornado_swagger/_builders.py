@@ -241,8 +241,6 @@ class OpenApiDocBuilder(BaseDocBuilder):
                 "description": _clean_description(description),
                 "version": api_version,
             },
-            "basePath": api_base_url,
-            "schemes": schemes,
             "components": {
                 "schemas": models,
                 "parameters": parameters,
@@ -256,6 +254,10 @@ class OpenApiDocBuilder(BaseDocBuilder):
             swagger_spec["securityDefinitions"] = security_definitions
         if security:
             swagger_spec["security"] = security
+        if api_base_url:
+            swagger_spec["servers"] = [
+                {"url": api_base_url}
+            ]
 
         return swagger_spec
 
