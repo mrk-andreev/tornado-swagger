@@ -1,7 +1,7 @@
 tornado-swagger
 ===============
 
-|Maintainability| |Snyk Vulnerabilities for GitHub Repo| |FOSSA Status|
+|Maintainability| |Snyk Vulnerabilities for GitHub Repo|
 |GitHub| |Code style: black|
 
 +--------+
