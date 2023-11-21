@@ -16,7 +16,7 @@ SWAGGER_TEMPLATE = os.path.abspath(os.path.join(os.path.dirname(__file__), "temp
 SWAGGER_DOC_SEPARATOR = "---"
 
 
-def _extract_swagger_definition(endpoint_doc):
+def _extract_swagger_definition(endpoint_doc: str):
     """Extract swagger definition after SWAGGER_DOC_SEPARATOR"""
     endpoint_doc = endpoint_doc.splitlines()
 
