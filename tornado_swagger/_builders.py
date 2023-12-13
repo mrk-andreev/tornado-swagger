@@ -28,7 +28,7 @@ def _extract_swagger_definition(endpoint_doc: str):
     return "\n".join(endpoint_doc)
 
 
-def build_swagger_docs(endpoint_doc):
+def build_swagger_docs(endpoint_doc: str):
     """Build swagger doc based on endpoint docstring"""
     endpoint_doc = _extract_swagger_definition(endpoint_doc)
 
@@ -112,7 +112,7 @@ def nesteddict2yaml(d, indent=10, result=""):
     return result
 
 
-def _clean_description(description):
+def _clean_description(description: str):
     """Remove empty space from description begin"""
     _start_desc = 0
     for i, word in enumerate(description):
