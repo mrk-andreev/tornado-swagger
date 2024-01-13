@@ -1,3 +1,4 @@
+"""Models"""
 from tornado_swagger._builders import build_swagger_docs
 
 

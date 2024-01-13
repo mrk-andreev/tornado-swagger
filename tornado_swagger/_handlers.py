@@ -1,3 +1,4 @@
+"""Handlers"""
 import tornado.web
 
 
