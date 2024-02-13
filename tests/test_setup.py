@@ -1,3 +1,4 @@
+"""Test setup"""
 import multiprocessing
 import socket
 import time
