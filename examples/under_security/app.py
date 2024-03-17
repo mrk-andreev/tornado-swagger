@@ -1,3 +1,4 @@
+"""App"""
 import tornado.web
 
 

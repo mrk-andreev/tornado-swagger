@@ -1,3 +1,4 @@
+"""Example of tornado security"""
 import tornado.ioloop
 import tornado.options
 import tornado.web
@@ -14,6 +15,7 @@ class SwaggerHomeHandlerSecure(BasicAuthMixin, _handlers.SwaggerUiHandler):
         self.get_authenticated_user(check_credentials_func=credentials.get, realm="Protected")
 
 
+# inject
 _handlers.SwaggerUiHandler = SwaggerHomeHandlerSecure
 
 if __name__ == "__main__":
