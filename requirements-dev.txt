@@ -1,7 +1,7 @@
 -r requirements.txt
 pytest==7.1.2
 pytest-deadfixtures==2.2.1
-black==22.6.0
+black==24.3.0
 autoflake==1.4
 flake8==5.0.4
 flake8-annotations-complexity==0.0.7
