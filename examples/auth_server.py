@@ -1,3 +1,4 @@
+"""Auth server"""
 import tornado.ioloop
 import tornado.options
 import tornado.web
