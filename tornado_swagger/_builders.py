@@ -254,7 +254,7 @@ class OpenApiDocBuilder(BaseDocBuilder):
         if contact:
             swagger_spec["info"]["contact"] = {"name": contact}
         if security_definitions:
-            swagger_spec["securityDefinitions"] = security_definitions
+            swagger_spec["components"]["securitySchemes"] = security_definitions
         if security:
             swagger_spec["security"] = security
 
