@@ -1,2 +1,2 @@
-tornado>=5.0
+tornado>=6.4.1
 PyYAML>=5.4
