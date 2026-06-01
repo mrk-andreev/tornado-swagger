@@ -1,4 +1,5 @@
 """Test builders"""
+
 import functools
 
 import pytest
@@ -16,14 +17,9 @@ from tornado_swagger._builders import (
     generate_doc_from_endpoints,
 )
 
-INVALID_ENDPOINT_DOC = (
-    SWAGGER_DOC_SEPARATOR
-    + """
+INVALID_ENDPOINT_DOC = SWAGGER_DOC_SEPARATOR + """
 tag"""
-)
-ENDPOINT_DOC = (
-    SWAGGER_DOC_SEPARATOR
-    + """
+ENDPOINT_DOC = SWAGGER_DOC_SEPARATOR + """
 tags:
   - Example
 summary: Create user
@@ -64,7 +60,6 @@ responses:
 "201":
   description: successful operation
 """
-)
 INVALID_SWAGGER_TEXT = "Invalid Swagger"
 
 

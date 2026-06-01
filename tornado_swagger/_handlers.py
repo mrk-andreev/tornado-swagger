@@ -1,4 +1,5 @@
 """Handlers"""
+
 import tornado.web
 
 
@@ -13,7 +14,7 @@ class SwaggerUiHandler(TornadoBaseHandler):
 
     def get(self):
         self.write(self.SWAGGER_HOME_TEMPLATE)
-        
+
     def options(self):
         if self.allow_cors:
             self.set_header("Access-Control-Allow-Origin", "*")
@@ -27,7 +28,7 @@ class SwaggerSpecHandler(TornadoBaseHandler):
 
     def get(self):
         self.write(self.SWAGGER_SPEC)
-        
+
     def options(self):
         if self.allow_cors:
             self.set_header("Access-Control-Allow-Origin", "*")

@@ -1,4 +1,6 @@
 """Test setup"""
+
+import asyncio
 import multiprocessing
 import socket
 import time
@@ -56,6 +58,7 @@ def test_export_swagger():
 
 
 def server_holder(port):
+    asyncio.set_event_loop(asyncio.new_event_loop())
     app = Application()
     app.listen(port=port)
     tornado.ioloop.IOLoop.current().start()
