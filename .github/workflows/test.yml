@@ -13,15 +13,18 @@ jobs:
       fail-fast: true
       matrix:
         os: [ windows-latest, ubuntu-latest ]
-        python-version: [ "3.7", "3.8", "3.9", "3.10" ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install requirements
-        run: pip install -r requirements-dev.txt
+          python-version: |
+            3.7
+            3.8
+            3.9
+            3.10
+      - name: Install tox
+        run: python -m pip install "tox>=4,<5"
       - name: Run unit tests
-        run: python setup.py test
+        run: python -m tox
