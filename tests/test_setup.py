@@ -1,28 +1,12 @@
 """Test setup"""
 
-import asyncio
-import multiprocessing
-import socket
-import time
-from contextlib import closing
-
 import pytest
-import tornado.httpclient
-import tornado.ioloop
 import tornado.web
 
+from tornado_swagger._handlers import SwaggerSpecHandler, SwaggerUiHandler, TornadoBaseHandler
 from tornado_swagger.setup import export_swagger, setup_swagger
 
-SERVER_START_TIMEOUT = 3
-
 SWAGGER_URL = "/api/doc"
-
-
-def find_free_port():
-    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
-        s.bind(("", 0))
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        return s.getsockname()[1]
 
 
 class ExampleHandler(tornado.web.RequestHandler):
@@ -57,31 +41,91 @@ def test_export_swagger():
     assert export_swagger(Application.routes)
 
 
-def server_holder(port):
-    asyncio.set_event_loop(asyncio.new_event_loop())
-    app = Application()
-    app.listen(port=port)
-    tornado.ioloop.IOLoop.current().start()
+def test_swagger_setup_configures_ui_handler_template():
+    Application()
+
+    handler = StubHandler(allow_cors=False)
+    handler.SWAGGER_HOME_TEMPLATE = SwaggerUiHandler.SWAGGER_HOME_TEMPLATE
+    SwaggerUiHandler.get(handler)
+
+    assert "Swagger UI" in handler.body
+    assert "{0}/swagger.json".format(SWAGGER_URL) in handler.body
 
 
-@pytest.fixture()
-def server():
-    port = find_free_port()
+def test_swagger_spec_handler_writes_configured_spec():
+    handler = StubHandler(allow_cors=False)
+    handler.SWAGGER_SPEC = {"swagger": "2.0"}
 
-    server_holder_process = multiprocessing.Process(target=server_holder, args=(port,))
-    server_holder_process.start()
-    time.sleep(SERVER_START_TIMEOUT)
-    yield port
-    server_holder_process.terminate()
-    server_holder_process.join()
+    SwaggerSpecHandler.get(handler)
+
+    assert handler.body == {"swagger": "2.0"}
 
 
-def test_swagger_setup_integration(server):
-    client = tornado.httpclient.HTTPClient()
-    response = client.fetch("http://localhost:{0}{1}".format(server, SWAGGER_URL))
-    assert "Swagger UI" in response.body.decode()
+def test_setup_swagger_accepts_relative_url_and_configures_handlers():
+    class RelativeUrlHandler(tornado.web.RequestHandler):
+        def get(self):
+            """
+            ---
+            tags:
+            - Example
+            """
+            self.write({})
+
+    routes = [tornado.web.url(r"/api/relative", RelativeUrlHandler)]
+
+    setup_swagger(
+        routes,
+        swagger_url="docs",
+        display_models=False,
+        allow_cors=True,
+        title="Configured API",
+    )
+
+    assert routes[0].regex.pattern == "/docs$"
+    assert routes[1].regex.pattern == "/docs/$"
+    assert routes[2].regex.pattern == "/docs/swagger.json$"
+    assert routes[2].target is SwaggerSpecHandler
+    assert SwaggerSpecHandler.SWAGGER_SPEC["info"]["title"] == "Configured API"
+    assert SwaggerSpecHandler.allow_cors is True
+    assert SwaggerUiHandler.allow_cors is True
+    assert "/docs/swagger.json" in SwaggerUiHandler.SWAGGER_HOME_TEMPLATE
+    assert "defaultModelsExpandDepth: -1" in SwaggerUiHandler.SWAGGER_HOME_TEMPLATE
 
 
-@pytest.fixture()
-def swaggered_app():
-    return Application()
+class StubHandler:
+    def __init__(self, allow_cors):
+        self.allow_cors = allow_cors
+        self.body = ""
+        self.headers = {}
+
+    def set_header(self, name, value):
+        self.headers[name] = value
+
+    def write(self, body):
+        self.body = body
+
+
+@pytest.mark.parametrize("handler_class", [SwaggerUiHandler, SwaggerSpecHandler])
+def test_swagger_handlers_set_cors_headers_when_enabled(handler_class):
+    handler = StubHandler(allow_cors=True)
+
+    handler_class.options(handler)
+
+    assert handler.headers == {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+    }
+
+
+@pytest.mark.parametrize("handler_class", [SwaggerUiHandler, SwaggerSpecHandler])
+def test_swagger_handlers_skip_cors_headers_when_disabled(handler_class):
+    handler = StubHandler(allow_cors=False)
+
+    handler_class.options(handler)
+
+    assert handler.headers == {}
+
+
+def test_base_handler_data_received_is_noop():
+    assert TornadoBaseHandler.data_received(None, b"chunk") is None
