@@ -213,6 +213,9 @@ Supported options:
 - ``api_base_url``: API base path in the generated schema. Defaults to ``/``.
   Swagger 2 emits this as ``basePath``; OpenAPI 3 emits it as
   ``servers[0].url``.
+- ``strip_prefix``: Optional route path prefix to remove from generated
+  ``paths``. Use this when Tornado routes include a deployment prefix that is
+  already represented by ``api_base_url``.
 - ``description``: API description text.
 - ``api_version``: API version string.
 - ``title``: API title.
@@ -292,6 +295,15 @@ versions, and Tornado 6.5.6 on Python 3.11, 3.12, 3.13, and 3.14.
 
 What’s new?
 -----------
+
+Version 1.7.0
+~~~~~~~~~~~~~
+
+- Add ``strip_prefix`` option to ``setup_swagger`` and ``export_swagger`` so
+  generated ``paths`` can remove a shared Tornado route prefix while
+  ``api_base_url`` still emits Swagger 2 ``basePath`` or OpenAPI 3
+  ``servers[0].url``
+  (`issue #72 <https://github.com/mrk-andreev/tornado-swagger/issues/72>`__).
 
 Version 1.6.0
 ~~~~~~~~~~~~~

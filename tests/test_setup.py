@@ -55,6 +55,19 @@ def test_export_swagger_accepts_openapi_security_schemes():
     assert docs["security"] == [{"BearerAuth": []}]
 
 
+def test_export_swagger_strips_configured_route_prefix():
+    routes = [tornado.web.url(r"/services/gradingtool-service/example", ExampleHandler)]
+
+    docs = export_swagger(
+        routes,
+        api_base_url="/services/gradingtool-service",
+        strip_prefix="/services/gradingtool-service",
+    )
+
+    assert docs["basePath"] == "/services/gradingtool-service"
+    assert sorted(docs["paths"]) == ["/example"]
+
+
 def test_swagger_setup_configures_ui_handler_template():
     Application()
 

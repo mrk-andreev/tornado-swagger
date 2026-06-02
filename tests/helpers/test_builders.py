@@ -11,6 +11,7 @@ from tornado_swagger._builders import (
     _build_doc_from_func_doc,
     _extract_parameters_names,
     _format_handler_path,
+    _strip_path_prefix,
     _try_extract_args,
     _try_extract_doc,
     build_swagger_docs,
@@ -109,6 +110,7 @@ def test_generate_doc_from_each_end_point(api_definition_version):
         api_version="",
         title="",
         contact="",
+        strip_prefix=None,
         security_definitions=None,
         schemes=[],
         security=None,
@@ -135,6 +137,7 @@ def test_generate_doc_keeps_request_body_on_post_operations():
         api_version="",
         title="",
         contact="",
+        strip_prefix=None,
         security_definitions=None,
         schemes=[],
         security=None,
@@ -155,6 +158,7 @@ def test_generate_doc_unknown_api_definition_version():
             api_version="",
             title="",
             contact="",
+            strip_prefix=None,
             security_definitions=None,
             schemes=[],
             security=None,
@@ -170,6 +174,7 @@ def test_generate_swagger_2_doc_includes_optional_metadata():
         api_version="1.2.3",
         title="Example",
         contact="Team",
+        strip_prefix=None,
         security_definitions={"ApiKeyAuth": {"type": "apiKey"}},
         schemes=["https"],
         security=[{"ApiKeyAuth": []}],
@@ -206,6 +211,7 @@ def test_generate_openapi_doc_uses_components_for_models_and_parameters(monkeypa
         api_version="1.2.3",
         title="Example",
         contact="",
+        strip_prefix=None,
         security_definitions=None,
         schemes=["https"],
         security=None,
@@ -227,6 +233,7 @@ def test_generate_openapi_doc_uses_servers_instead_of_swagger_2_base_fields():
         api_version="1.2.3",
         title="Example",
         contact="",
+        strip_prefix=None,
         security_definitions=None,
         schemes=["https"],
         security=None,
@@ -246,6 +253,7 @@ def test_generate_openapi_31_doc_emits_31_version():
         api_version="1.2.3",
         title="Example",
         contact="",
+        strip_prefix=None,
         security_definitions=None,
         schemes=["https"],
         security=None,
@@ -266,6 +274,7 @@ def test_generate_openapi_doc_includes_optional_metadata():
         api_version="1.2.3",
         title="Example",
         contact="Team",
+        strip_prefix=None,
         security_definitions=None,
         security_schemes=security_schemes,
         schemes=["https"],
@@ -289,6 +298,7 @@ def test_generate_openapi_doc_keeps_security_definitions_backwards_compatibility
         api_version="1.2.3",
         title="Example",
         contact="",
+        strip_prefix=None,
         security_definitions=security_definitions,
         schemes=["https"],
         security=[{"ApiKeyAuth": []}],
@@ -307,6 +317,7 @@ def test_generate_swagger_2_doc_rejects_openapi_security_schemes():
             api_version="1.2.3",
             title="Example",
             contact="",
+            strip_prefix=None,
             security_definitions=None,
             security_schemes={"BearerAuth": {"type": "http", "scheme": "bearer"}},
             schemes=["https"],
@@ -324,6 +335,7 @@ def test_generate_swagger_2_doc_rejects_http_security_definition():
             api_version="1.2.3",
             title="Example",
             contact="",
+            strip_prefix=None,
             security_definitions={"BearerAuth": {"type": "http", "scheme": "bearer"}},
             schemes=["https"],
             security=[{"BearerAuth": []}],
@@ -378,6 +390,78 @@ def test__format_handler_path():
         method="get",
     )
     assert route_path == "/api/{posts_id}/{post_id2}/{post_id3}"
+
+
+@pytest.mark.parametrize(
+    ("path", "strip_prefix", "expected"),
+    [
+        ("/services/gradingtool-service/submit_sync", "/services/gradingtool-service", "/submit_sync"),
+        ("/services/gradingtool-service", "/services/gradingtool-service", "/"),
+        ("/services/gradingtool-service/submit_sync", "services/gradingtool-service/", "/submit_sync"),
+        ("/apiary/submit_sync", "/api", "/apiary/submit_sync"),
+        ("/api/submit_sync", None, "/api/submit_sync"),
+        ("/api/submit_sync", "/", "/api/submit_sync"),
+    ],
+)
+def test_strip_path_prefix_respects_path_boundaries(path, strip_prefix, expected):
+    assert _strip_path_prefix(path, strip_prefix) == expected
+
+
+@pytest.mark.parametrize("api_definition_version", doc_builders.keys())
+def test_generate_doc_strips_configured_route_prefix(api_definition_version):
+    class PrefixedHandler(tornado.web.RequestHandler):
+        def get(self, item_id=None):
+            """---
+            tags:
+            - Example
+            """
+
+    routes = [
+        tornado.web.url(r"/services/gradingtool-service/submit_sync", PrefixedHandler),
+        tornado.web.url(r"/services/gradingtool-service/items/(\w+)", PrefixedHandler),
+    ]
+
+    docs = generate_doc_from_endpoints(
+        routes,
+        api_base_url="/services/gradingtool-service",
+        description="",
+        api_version="",
+        title="",
+        contact="",
+        strip_prefix="/services/gradingtool-service",
+        security_definitions=None,
+        schemes=[],
+        security=None,
+        api_definition_version=api_definition_version,
+    )
+
+    assert sorted(docs["paths"]) == ["/items/{item_id}", "/submit_sync"]
+
+
+def test_generate_doc_keeps_prefixed_routes_without_strip_prefix():
+    class PrefixedHandler(tornado.web.RequestHandler):
+        def get(self):
+            """---
+            tags:
+            - Example
+            """
+
+    routes = [tornado.web.url(r"/services/gradingtool-service/submit_sync", PrefixedHandler)]
+
+    docs = generate_doc_from_endpoints(
+        routes,
+        api_base_url="/services/gradingtool-service",
+        description="",
+        api_version="",
+        title="",
+        contact="",
+        security_definitions=None,
+        schemes=[],
+        security=None,
+        api_definition_version=API_SWAGGER_2,
+    )
+
+    assert sorted(docs["paths"]) == ["/services/gradingtool-service/submit_sync"]
 
 
 def test_format_handler_path_skips_illegal_route():
