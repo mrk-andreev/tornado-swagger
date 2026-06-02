@@ -1,7 +1,7 @@
 tornado-swagger
 ===============
 
-|PyPI| |GitHub| |Code style: black| |Maintainability| |Snyk Vulnerabilities for GitHub Repo|
+|PyPI| |GitHub| |Code style: black| |Maintainability|
 
 tornado-swagger builds Swagger/OpenAPI documentation for Tornado
 applications from YAML blocks in request-handler docstrings. It can inject a
@@ -428,7 +428,6 @@ License
 
 .. |Maintainability| image:: https://api.codeclimate.com/v1/badges/d45717a5cfedeaef195a/maintainability
    :target: https://codeclimate.com/github/mrk-andreev/tornado-swagger/maintainability
-.. |Snyk Vulnerabilities for GitHub Repo| image:: https://img.shields.io/snyk/vulnerabilities/github/mrk-andreev/tornado-swagger.svg
 .. |FOSSA Status| image:: https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmrk-andreev%2Ftornado-swagger.svg?type=shield
    :target: https://app.fossa.io/projects/git%2Bgithub.com%2Fmrk-andreev%2Ftornado-swagger?ref=badge_shield
 .. |GitHub| image:: https://img.shields.io/github/license/mrk-andreev/tornado-swagger.svg
