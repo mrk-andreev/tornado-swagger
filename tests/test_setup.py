@@ -4,6 +4,7 @@ import pytest
 import tornado.web
 
 from tornado_swagger._handlers import SwaggerSpecHandler, SwaggerUiHandler, TornadoBaseHandler
+from tornado_swagger.const import API_OPENAPI_3
 from tornado_swagger.setup import export_swagger, setup_swagger
 
 SWAGGER_URL = "/api/doc"
@@ -39,6 +40,20 @@ class Application(tornado.web.Application):
 
 def test_export_swagger():
     assert export_swagger(Application.routes)
+
+
+def test_export_swagger_accepts_openapi_security_schemes():
+    docs = export_swagger(
+        [],
+        api_definition_version=API_OPENAPI_3,
+        security_schemes={"BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}},
+        security=[{"BearerAuth": []}],
+    )
+
+    assert docs["components"]["securitySchemes"] == {
+        "BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
+    }
+    assert docs["security"] == [{"BearerAuth": []}]
 
 
 def test_swagger_setup_configures_ui_handler_template():

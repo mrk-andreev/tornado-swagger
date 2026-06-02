@@ -149,7 +149,8 @@ class Application(tornado.web.Application):
             title="Journal API",
             contact="name@domain",
             schemes=["https"],
-            security_definitions={"ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}},
+            security_schemes={"BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}},
+            security=[{"BearerAuth": []}],
             api_definition_version=API_OPENAPI_3,
         )
         super(Application, self).__init__(self._routes, **settings)

@@ -219,7 +219,7 @@ def test_generate_openapi_doc_uses_components_for_models_and_parameters(monkeypa
 
 
 def test_generate_openapi_doc_includes_optional_metadata():
-    security_definitions = {"ApiKeyAuth": {"type": "apiKey"}}
+    security_schemes = {"BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}}
 
     docs = generate_doc_from_endpoints(
         [],
@@ -228,16 +228,69 @@ def test_generate_openapi_doc_includes_optional_metadata():
         api_version="1.2.3",
         title="Example",
         contact="Team",
+        security_definitions=None,
+        security_schemes=security_schemes,
+        schemes=["https"],
+        security=[{"BearerAuth": []}],
+        api_definition_version=API_OPENAPI_3,
+    )
+
+    assert docs["info"]["contact"] == {"name": "Team"}
+    assert "securityDefinitions" not in docs
+    assert docs["components"]["securitySchemes"] == security_schemes
+    assert docs["security"] == [{"BearerAuth": []}]
+
+
+def test_generate_openapi_doc_keeps_security_definitions_backwards_compatibility():
+    security_definitions = {"ApiKeyAuth": {"type": "apiKey"}}
+
+    docs = generate_doc_from_endpoints(
+        [],
+        api_base_url="/api",
+        description="Example API",
+        api_version="1.2.3",
+        title="Example",
+        contact="",
         security_definitions=security_definitions,
         schemes=["https"],
         security=[{"ApiKeyAuth": []}],
         api_definition_version=API_OPENAPI_3,
     )
 
-    assert docs["info"]["contact"] == {"name": "Team"}
-    assert "securityDefinitions" not in docs
     assert docs["components"]["securitySchemes"] == security_definitions
-    assert docs["security"] == [{"ApiKeyAuth": []}]
+
+
+def test_generate_swagger_2_doc_rejects_openapi_security_schemes():
+    with pytest.raises(ValueError, match="security_schemes is only supported"):
+        generate_doc_from_endpoints(
+            [],
+            api_base_url="/api",
+            description="Example API",
+            api_version="1.2.3",
+            title="Example",
+            contact="",
+            security_definitions=None,
+            security_schemes={"BearerAuth": {"type": "http", "scheme": "bearer"}},
+            schemes=["https"],
+            security=[{"BearerAuth": []}],
+            api_definition_version=API_SWAGGER_2,
+        )
+
+
+def test_generate_swagger_2_doc_rejects_http_security_definition():
+    with pytest.raises(ValueError, match="HTTP security schemes require"):
+        generate_doc_from_endpoints(
+            [],
+            api_base_url="/api",
+            description="Example API",
+            api_version="1.2.3",
+            title="Example",
+            contact="",
+            security_definitions={"BearerAuth": {"type": "http", "scheme": "bearer"}},
+            schemes=["https"],
+            security=[{"BearerAuth": []}],
+            api_definition_version=API_SWAGGER_2,
+        )
 
 
 def test_extract_parameters_names_empty_parameter():

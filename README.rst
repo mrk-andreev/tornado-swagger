@@ -153,7 +153,8 @@ OpenAPI 3
 
 OpenAPI 3 support is available by passing ``API_OPENAPI_3`` to
 ``setup_swagger`` or ``export_swagger``. OpenAPI 3 references use
-``#/components/schemas/...`` and ``#/components/parameters/...``.
+``#/components/schemas/...`` and ``#/components/parameters/...``. OpenAPI 3
+security schemes can be passed with ``security_schemes``.
 
 .. code:: python
 
@@ -164,6 +165,28 @@ OpenAPI 3 support is available by passing ``API_OPENAPI_3`` to
    setup_swagger(
        routes,
        api_definition_version=API_OPENAPI_3,
+   )
+
+JWT bearer authentication requires OpenAPI 3 because Swagger 2.0 does not
+support ``type: http`` security schemes.
+
+.. code:: python
+
+   from tornado_swagger.const import API_OPENAPI_3
+   from tornado_swagger.setup import setup_swagger
+
+
+   setup_swagger(
+       routes,
+       api_definition_version=API_OPENAPI_3,
+       security_schemes={
+           "BearerAuth": {
+               "type": "http",
+               "scheme": "bearer",
+               "bearerFormat": "JWT",
+           },
+       },
+       security=[{"BearerAuth": []}],
    )
 
 Configuration
@@ -181,7 +204,11 @@ Supported options:
 - ``title``: API title.
 - ``contact``: Contact name included in the schema.
 - ``schemes``: Swagger 2 scheme list, for example ``["https"]``.
-- ``security_definitions``: Security definitions to include in the schema.
+- ``security_definitions``: Swagger 2 security definitions to include in the
+  schema. For backwards compatibility, OpenAPI 3 also accepts this option and
+  emits it as ``components.securitySchemes``.
+- ``security_schemes``: OpenAPI 3 security schemes to include under
+  ``components.securitySchemes``.
 - ``security``: Global security requirements.
 - ``display_models``: Show or hide the Swagger UI models panel. Defaults to
   ``True``.

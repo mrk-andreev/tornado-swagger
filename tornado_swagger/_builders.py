@@ -158,6 +158,7 @@ class BaseDocBuilder(abc.ABC):
         contact,
         schemes,
         security_definitions,
+        security_schemes,
         security,
         models,
         parameters
@@ -184,11 +185,20 @@ class Swagger2DocBuilder(BaseDocBuilder):
         contact,
         schemes,
         security_definitions,
+        security_schemes,
         security,
         models,
         parameters
     ):
         """Generate docs"""
+        if security_schemes:
+            raise ValueError("security_schemes is only supported with api_definition_version=API_OPENAPI_3")
+
+        if security_definitions:
+            for security_definition in security_definitions.values():
+                if security_definition.get("type") == "http":
+                    raise ValueError("HTTP security schemes require api_definition_version=API_OPENAPI_3")
+
         swagger_spec = {
             "swagger": "2.0",
             "info": {
@@ -231,11 +241,14 @@ class OpenApiDocBuilder(BaseDocBuilder):
         contact,
         schemes,
         security_definitions,
+        security_schemes,
         security,
         models,
         parameters
     ):
         """Generate docs"""
+        security_schemes = security_schemes or security_definitions
+
         swagger_spec = {
             "openapi": "3.0.3",
             "info": {
@@ -254,8 +267,8 @@ class OpenApiDocBuilder(BaseDocBuilder):
 
         if contact:
             swagger_spec["info"]["contact"] = {"name": contact}
-        if security_definitions:
-            swagger_spec["components"]["securitySchemes"] = security_definitions
+        if security_schemes:
+            swagger_spec["components"]["securitySchemes"] = security_schemes
         if security:
             swagger_spec["security"] = security
 
@@ -276,7 +289,8 @@ def generate_doc_from_endpoints(
     schemes,
     security_definitions,
     security,
-    api_definition_version
+    api_definition_version,
+    security_schemes=None,
 ):
     """Generate doc based on routes"""
     from tornado_swagger.model import export_swagger_models
@@ -294,6 +308,7 @@ def generate_doc_from_endpoints(
         contact=contact,
         schemes=schemes,
         security_definitions=security_definitions,
+        security_schemes=security_schemes,
         security=security,
         models=export_swagger_models(),
         parameters=export_swagger_parameters(),

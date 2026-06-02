@@ -22,6 +22,7 @@ def export_swagger(
     contact: str = "",
     schemes: list = None,
     security_definitions: dict = None,
+    security_schemes: dict = None,
     security: list = None,
     api_definition_version: str = API_SWAGGER_2,
 ):
@@ -35,6 +36,7 @@ def export_swagger(
         contact=contact,
         schemes=schemes,
         security_definitions=security_definitions,
+        security_schemes=security_schemes,
         security=security,
         api_definition_version=api_definition_version,
     )
@@ -51,6 +53,7 @@ def setup_swagger(
     contact: str = "",
     schemes: list = None,
     security_definitions: dict = None,
+    security_schemes: dict = None,
     security: list = None,
     display_models: bool = True,
     api_definition_version: str = API_SWAGGER_2,
@@ -66,6 +69,7 @@ def setup_swagger(
         contact=contact,
         schemes=schemes,
         security_definitions=security_definitions,
+        security_schemes=security_schemes,
         security=security,
         api_definition_version=api_definition_version,
     )
