@@ -12,7 +12,7 @@ import warnings
 import tornado.web
 import yaml
 
-from tornado_swagger.const import API_OPENAPI_3, API_SWAGGER_2
+from tornado_swagger.const import API_OPENAPI_3, API_OPENAPI_3_1, API_SWAGGER_2
 
 SWAGGER_TEMPLATE = os.path.abspath(os.path.join(os.path.dirname(__file__), "templates", "swagger.yaml"))
 SWAGGER_DOC_SEPARATOR = "---"
@@ -225,6 +225,8 @@ class Swagger2DocBuilder(BaseDocBuilder):
 class OpenApiDocBuilder(BaseDocBuilder):
     """OpenAPI 3 Schema builder"""
 
+    openapi_version = "3.0.3"
+
     @property
     def schema(self):
         """Supported Schema"""
@@ -250,7 +252,7 @@ class OpenApiDocBuilder(BaseDocBuilder):
         security_schemes = security_schemes or security_definitions
 
         swagger_spec = {
-            "openapi": "3.0.3",
+            "openapi": self.openapi_version,
             "info": {
                 "title": title,
                 "description": _clean_description(description),
@@ -276,7 +278,18 @@ class OpenApiDocBuilder(BaseDocBuilder):
         return swagger_spec
 
 
-doc_builders = {b.schema: b for b in [Swagger2DocBuilder(), OpenApiDocBuilder()]}
+class OpenApi31DocBuilder(OpenApiDocBuilder):
+    """OpenAPI 3.1 Schema builder"""
+
+    openapi_version = "3.1.0"
+
+    @property
+    def schema(self):
+        """Supported Schema"""
+        return API_OPENAPI_3_1
+
+
+doc_builders = {b.schema: b for b in [Swagger2DocBuilder(), OpenApiDocBuilder(), OpenApi31DocBuilder()]}
 
 
 def generate_doc_from_endpoints(

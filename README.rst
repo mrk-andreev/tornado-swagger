@@ -9,7 +9,8 @@ Swagger UI endpoint into your route list and can also export the generated
 schema as a Python dictionary.
 
 The default output is Swagger 2.0. Experimental OpenAPI 3 output is available
-with ``api_definition_version=API_OPENAPI_3``.
+with ``api_definition_version=API_OPENAPI_3`` or
+``api_definition_version=API_OPENAPI_3_1``.
 
 Links
 -----
@@ -34,6 +35,15 @@ Requirements
 - Python 3.7 through 3.14
 - Tornado 5.0 or newer
 - PyYAML 5.4 or newer
+
+Standards compatibility
+-----------------------
+
+tornado-swagger generates documents compatible with Swagger 2.0, OpenAPI
+3.0.3, and OpenAPI 3.1.0. Compatibility tests validate generated documents
+against the corresponding standards. Valid operation, schema, parameter,
+response, request body, and security YAML blocks are passed through into the
+generated document for the selected standard.
 
 Quick start
 -----------
@@ -151,10 +161,12 @@ to models with ``#/definitions/...`` and parameters with ``#/parameters/...``.
 OpenAPI 3
 ---------
 
-OpenAPI 3 support is available by passing ``API_OPENAPI_3`` to
-``setup_swagger`` or ``export_swagger``. OpenAPI 3 references use
-``#/components/schemas/...`` and ``#/components/parameters/...``. OpenAPI 3
-security schemes can be passed with ``security_schemes``.
+OpenAPI 3 support is available by passing ``API_OPENAPI_3`` or
+``API_OPENAPI_3_1`` to ``setup_swagger`` or ``export_swagger``.
+``API_OPENAPI_3`` emits OpenAPI 3.0.3, while ``API_OPENAPI_3_1`` emits
+OpenAPI 3.1.0. OpenAPI 3 references use ``#/components/schemas/...`` and
+``#/components/parameters/...``. OpenAPI 3 security schemes can be passed with
+``security_schemes``.
 
 .. code:: python
 
@@ -215,7 +227,7 @@ Supported options:
 - ``display_models``: Show or hide the Swagger UI models panel. Defaults to
   ``True``.
 - ``api_definition_version``: ``API_SWAGGER_2`` by default, or
-  ``API_OPENAPI_3``.
+  ``API_OPENAPI_3`` / ``API_OPENAPI_3_1``.
 - ``allow_cors``: Add permissive CORS headers to Swagger UI and
   ``swagger.json`` responses. Defaults to ``False``.
 

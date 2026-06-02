@@ -1,0 +1,132 @@
+openapi: 3.1.0
+info:
+  title: Compatibility API
+  description: OpenAPI 3.1 compatibility fixture
+  version: 1.0.0
+  contact:
+    name: API Team
+servers:
+- url: /v1
+components:
+  schemas:
+    Pet:
+      type:
+      - object
+      - "null"
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type:
+          - string
+          - "null"
+      unevaluatedProperties: false
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        kind:
+          const: error
+  parameters:
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results
+      required: false
+      schema:
+        type: integer
+        format: int32
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- BearerAuth: []
+paths:
+  /pets/{pet_id}:
+    get:
+      tags:
+      - Pets
+      summary: Get a pet
+      parameters:
+      - name: pet_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/LimitParam'
+      responses:
+        "200":
+          description: Pet response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+              examples:
+                pet:
+                  value:
+                    id: 1
+                    name: Fido
+          links:
+            PetById:
+              operationId: getPet
+              parameters:
+                pet_id: '$response.body#/id'
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+      - Pets
+      summary: Create a pet
+      parameters:
+      - name: pet_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+  /pets/search:
+    post:
+      tags:
+      - Pets
+      summary: Search pets
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+              - name
+      responses:
+        "204":
+          description: No content

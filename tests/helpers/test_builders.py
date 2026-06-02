@@ -18,7 +18,7 @@ from tornado_swagger._builders import (
     doc_builders,
     generate_doc_from_endpoints,
 )
-from tornado_swagger.const import API_OPENAPI_3, API_SWAGGER_2
+from tornado_swagger.const import API_OPENAPI_3, API_OPENAPI_3_1, API_SWAGGER_2
 
 INVALID_ENDPOINT_DOC = SWAGGER_DOC_SEPARATOR + """
 tag"""
@@ -235,6 +235,24 @@ def test_generate_openapi_doc_uses_servers_instead_of_swagger_2_base_fields():
     assert docs["servers"] == [{"url": "/api"}]
     assert "basePath" not in docs
     assert "schemes" not in docs
+
+
+def test_generate_openapi_31_doc_emits_31_version():
+    docs = generate_doc_from_endpoints(
+        [],
+        api_base_url="/api",
+        description="Example API",
+        api_version="1.2.3",
+        title="Example",
+        contact="",
+        security_definitions=None,
+        schemes=["https"],
+        security=None,
+        api_definition_version=API_OPENAPI_3_1,
+    )
+
+    assert docs["openapi"] == "3.1.0"
+    assert docs["servers"] == [{"url": "/api"}]
 
 
 def test_generate_openapi_doc_includes_optional_metadata():
