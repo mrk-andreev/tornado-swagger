@@ -1,5 +1,7 @@
 """Test setup"""
 
+import typing
+
 import pytest
 import tornado.web
 
@@ -12,8 +14,7 @@ SWAGGER_URL = "/api/doc"
 
 class ExampleHandler(tornado.web.RequestHandler):
     def get(self):
-        """
-        Description end-point
+        """Description end-point
 
         ---
         tags:
@@ -28,14 +29,14 @@ class ExampleHandler(tornado.web.RequestHandler):
 
 
 class Application(tornado.web.Application):
-    routes = [tornado.web.url(r"/api/example", ExampleHandler)]
+    routes: typing.ClassVar = [tornado.web.url(r"/api/example", ExampleHandler)]
 
     def __init__(self):
         setup_swagger(
             self.routes,
             swagger_url=SWAGGER_URL,
         )
-        super(Application, self).__init__(self.routes)
+        super().__init__(self.routes)
 
 
 def test_export_swagger():
@@ -62,7 +63,7 @@ def test_swagger_setup_configures_ui_handler_template():
     SwaggerUiHandler.get(handler)
 
     assert "Swagger UI" in handler.body
-    assert "{0}/swagger.json".format(SWAGGER_URL) in handler.body
+    assert f"{SWAGGER_URL}/swagger.json" in handler.body
 
 
 def test_swagger_spec_handler_writes_configured_spec():
@@ -77,8 +78,7 @@ def test_swagger_spec_handler_writes_configured_spec():
 def test_setup_swagger_accepts_relative_url_and_configures_handlers():
     class RelativeUrlHandler(tornado.web.RequestHandler):
         def get(self):
-            """
-            ---
+            """---
             tags:
             - Example
             """

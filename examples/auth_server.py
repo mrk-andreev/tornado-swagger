@@ -9,8 +9,7 @@ from tornado_swagger.setup import setup_swagger
 
 class AuthHandler(tornado.web.RequestHandler):
     def get(self):
-        """
-        ---
+        """---
         tags:
         - Auth
         summary: Get user auth key
@@ -21,8 +20,7 @@ class AuthHandler(tornado.web.RequestHandler):
         self.finish("test user auth")
 
     def post(self):
-        """
-        ---
+        """---
         tags:
         - Auth
         summary: Check user auth
@@ -34,7 +32,7 @@ class AuthHandler(tornado.web.RequestHandler):
               description: the auth key return
         """
         x_api_key = self.request.headers.get("X-API-Key")
-        self.finish("the x-api-key request get is %s" % x_api_key)
+        self.finish(f"the x-api-key request get is {x_api_key}")
 
 
 class Application(tornado.web.Application):
@@ -56,7 +54,7 @@ class Application(tornado.web.Application):
             security_definitions={"ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}},
             security=[{"ApiKeyAuth": []}],
         )
-        super(Application, self).__init__(self._routes, **settings)
+        super().__init__(self._routes, **settings)
 
 
 if __name__ == "__main__":

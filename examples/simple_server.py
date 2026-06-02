@@ -7,8 +7,7 @@ from tornado_swagger.setup import setup_swagger
 
 class ExampleHandler(tornado.web.RequestHandler):
     def post(self):
-        """
-        Description end-point
+        """Description end-point
 
         ---
         tags:
@@ -63,7 +62,7 @@ class Application(tornado.web.Application):
         settings = {"debug": True}
 
         setup_swagger(self._routes)
-        super(Application, self).__init__(self._routes, **settings)
+        super().__init__(self._routes, **settings)
 
 
 if __name__ == "__main__":

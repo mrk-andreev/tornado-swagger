@@ -10,8 +10,7 @@ from tornado_swagger.setup import setup_swagger
 
 class PostsHandler(tornado.web.RequestHandler):
     def get(self):
-        """
-        ---
+        """---
         tags:
         - Posts
         summary: List posts
@@ -28,8 +27,7 @@ class PostsHandler(tornado.web.RequestHandler):
         """
 
     def post(self):
-        """
-        ---
+        """---
         tags:
         - Posts
         summary: Add posts
@@ -48,8 +46,7 @@ class PostsHandler(tornado.web.RequestHandler):
 
 class PostsDetailsHandler(tornado.web.RequestHandler):
     def get(self, posts_id):
-        """
-        ---
+        """---
         tags:
         - Posts
         summary: Get posts details
@@ -66,8 +63,7 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
         """
 
     def patch(self, posts_id):
-        """
-        ---
+        """---
         tags:
         - Posts
         summary: Edit posts
@@ -85,8 +81,7 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
         """
 
     def delete(self, posts_id):
-        """
-        ---
+        """---
         tags:
         - Posts
         summary: Delete posts
@@ -100,8 +95,7 @@ class PostsDetailsHandler(tornado.web.RequestHandler):
 
 @register_swagger_parameter
 class PostId:
-    """
-    ---
+    """---
     name: posts_id
     in: path
     description: ID of post
@@ -112,8 +106,7 @@ class PostId:
 
 @register_swagger_model
 class PostModel:
-    """
-    ---
+    """---
     type: object
     description: Post model representation
     properties:
@@ -153,7 +146,7 @@ class Application(tornado.web.Application):
             security=[{"BearerAuth": []}],
             api_definition_version=API_OPENAPI_3,
         )
-        super(Application, self).__init__(self._routes, **settings)
+        super().__init__(self._routes, **settings)
 
 
 if __name__ == "__main__":

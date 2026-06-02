@@ -11,12 +11,12 @@ from tornado_swagger._builders import (
     _build_doc_from_func_doc,
     _extract_parameters_names,
     _format_handler_path,
-    nesteddict2yaml,
     _try_extract_args,
     _try_extract_doc,
     build_swagger_docs,
     doc_builders,
     generate_doc_from_endpoints,
+    nesteddict2yaml,
 )
 from tornado_swagger.const import API_OPENAPI_3, API_OPENAPI_3_1, API_SWAGGER_2
 
@@ -397,8 +397,7 @@ def test_format_handler_path_skips_illegal_route():
 def test_generate_doc_skips_illegal_route_paths():
     class HandlerWithIllegalRoute(tornado.web.RequestHandler):
         def get(self, posts_id, post_id2):
-            """
-            ---
+            """---
             tags:
             - Example
             """
@@ -432,7 +431,7 @@ def test_nesteddict2yaml():
 
 def test_try_extract_args():
     def method_handler(self, arg_name):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     args = _try_extract_args(method_handler)
     assert "arg_name" in args
@@ -448,7 +447,7 @@ def test_try_extract_decorated_args():
 
     @dummy_decorator
     def method_handler(self, arg_name):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     args = _try_extract_args(method_handler)
     assert "arg_name" in args
@@ -456,11 +455,10 @@ def test_try_extract_decorated_args():
 
 def test_try_extract_doc():
     def method_handler(self, arg_name):
-        """
-        ---
+        """---
         Foo
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     doc = _try_extract_doc(method_handler)
     assert "Foo" in doc
@@ -476,11 +474,10 @@ def test_try_extract_decorated_doc():
 
     @dummy_decorator
     def method_handler(self, arg_name):
-        """
-        ---
+        """---
         Foo
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     doc = _try_extract_doc(method_handler)
     assert "Foo" in doc

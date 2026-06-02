@@ -18,7 +18,7 @@ FIXTURES = Path(__file__).parent / "fixtures" / "compat"
 
 
 def _load_fixture(filename):
-    with open(FIXTURES / filename, encoding="utf-8") as f:
+    with (FIXTURES / filename).open(encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -29,14 +29,14 @@ def _docstring(operation):
 def _routes_from_fixture(expected):
     class PetHandler(tornado.web.RequestHandler):
         def get(self, pet_id):
-            raise NotImplementedError()
+            raise NotImplementedError
 
         def post(self, pet_id):
-            raise NotImplementedError()
+            raise NotImplementedError
 
     class SearchHandler(tornado.web.RequestHandler):
         def post(self):
-            raise NotImplementedError()
+            raise NotImplementedError
 
     pet_path = expected["paths"]["/pets/{pet_id}"]
     PetHandler.get.__doc__ = _docstring(pet_path["get"])

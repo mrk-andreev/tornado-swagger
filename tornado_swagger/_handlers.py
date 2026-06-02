@@ -1,10 +1,12 @@
-"""Handlers"""
+"""Handlers."""
+
+import typing
 
 import tornado.web
 
 
 class TornadoBaseHandler(tornado.web.RequestHandler):
-    def data_received(self, chunk: bytes):
+    def data_received(self, chunk: bytes) -> None:
         pass
 
 
@@ -12,10 +14,10 @@ class SwaggerUiHandler(TornadoBaseHandler):
     SWAGGER_HOME_TEMPLATE = ""
     allow_cors: bool = False
 
-    def get(self):
+    def get(self) -> None:
         self.write(self.SWAGGER_HOME_TEMPLATE)
 
-    def options(self):
+    def options(self) -> None:
         if self.allow_cors:
             self.set_header("Access-Control-Allow-Origin", "*")
             self.set_header("Access-Control-Allow-Headers", "Content-Type")
@@ -23,13 +25,13 @@ class SwaggerUiHandler(TornadoBaseHandler):
 
 
 class SwaggerSpecHandler(TornadoBaseHandler):
-    SWAGGER_SPEC = ""
+    SWAGGER_SPEC: typing.ClassVar[typing.Any] = ""
     allow_cors: bool = False
 
-    def get(self):
+    def get(self) -> None:
         self.write(self.SWAGGER_SPEC)
 
-    def options(self):
+    def options(self) -> None:
         if self.allow_cors:
             self.set_header("Access-Control-Allow-Origin", "*")
             self.set_header("Access-Control-Allow-Headers", "Content-Type")

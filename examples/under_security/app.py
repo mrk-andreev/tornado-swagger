@@ -2,11 +2,12 @@
 
 import tornado.web
 
+from tornado_swagger.setup import setup_swagger
+
 
 class ExampleHandler(tornado.web.RequestHandler):
     def post(self):
-        """
-        Description end-point
+        """Description end-point
 
         ---
         tags:
@@ -59,7 +60,6 @@ class Application(tornado.web.Application):
 
     def __init__(self):
         settings = {"debug": True}
-        from tornado_swagger.setup import setup_swagger
 
         setup_swagger(self._routes)
-        super(Application, self).__init__(self._routes, **settings)
+        super().__init__(self._routes, **settings)

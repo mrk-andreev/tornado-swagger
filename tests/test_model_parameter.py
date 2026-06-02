@@ -17,8 +17,7 @@ def clean_swagger_stores():
 def test_register_swagger_model_saves_definition_and_returns_class():
     @model.register_swagger_model
     class Pet:
-        """
-        ---
+        """---
         type: object
         properties:
           name:
@@ -50,8 +49,7 @@ def test_register_swagger_model_ignores_classes_without_swagger_doc():
 def test_register_swagger_parameter_saves_definition_and_returns_class():
     @parameter.register_swagger_parameter
     class Limit:
-        """
-        ---
+        """---
         name: limit
         in: query
         required: false
