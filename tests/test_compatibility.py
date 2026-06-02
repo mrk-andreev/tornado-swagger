@@ -11,6 +11,17 @@ try:
 except ImportError:
     from openapi_spec_validator import validate_spec as validate
 
+# OpenAPI 3.1 validation requires openapi-spec-validator >= 0.6, which is not
+# installed on older Python versions (see requirements-dev.txt). The dedicated
+# 3.1 validator class only exists from that release onwards, so its presence is
+# used as a capability probe.
+try:
+    from openapi_spec_validator import OpenAPIV31SpecValidator  # noqa: F401
+
+    _SUPPORTS_OPENAPI_31 = True
+except ImportError:
+    _SUPPORTS_OPENAPI_31 = False
+
 from tornado_swagger.const import API_OPENAPI_3, API_OPENAPI_3_1, API_SWAGGER_2
 from tornado_swagger.setup import export_swagger
 
@@ -95,6 +106,9 @@ def test_generated_document_matches_and_validates_against_spec(monkeypatch, fixt
     docs = _export_from_fixture(expected, api_definition_version)
 
     assert docs == expected
+
+    if api_definition_version == API_OPENAPI_3_1 and not _SUPPORTS_OPENAPI_31:
+        pytest.skip("installed openapi-spec-validator lacks OpenAPI 3.1 support")
     validate(docs)
 
 

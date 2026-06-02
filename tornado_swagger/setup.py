@@ -1,7 +1,5 @@
 """Setup."""
 
-from __future__ import annotations
-
 import typing
 from pathlib import Path
 
@@ -24,19 +22,19 @@ DEFAULT_SWAGGER_UI_PRESET_SRI = "sha512-OODuIoKisl5o35O0UGldXg3FhPVY3MTpS+wtYTTC
 
 
 def export_swagger(
-    routes: list[tornado.web.URLSpec],
+    routes: typing.List[tornado.web.URLSpec],
     *,
     api_base_url: str = "/",
     description: str = "Swagger API definition",
     api_version: str = "1.0.0",
     title: str = "Swagger API",
     contact: str = "",
-    schemes: list[typing.Any] | None = None,
-    security_definitions: dict[str, typing.Any] | None = None,
-    security_schemes: dict[str, typing.Any] | None = None,
-    security: list[typing.Any] | None = None,
+    schemes: typing.Optional[typing.List[typing.Any]] = None,
+    security_definitions: typing.Optional[typing.Dict[str, typing.Any]] = None,
+    security_schemes: typing.Optional[typing.Dict[str, typing.Any]] = None,
+    security: typing.Optional[typing.List[typing.Any]] = None,
     api_definition_version: str = API_SWAGGER_2,
-) -> dict[str, typing.Any]:
+) -> typing.Dict[str, typing.Any]:
     """Export swagger schema as dict."""
     return generate_doc_from_endpoints(
         routes,
@@ -54,7 +52,7 @@ def export_swagger(
 
 
 def setup_swagger(
-    routes: list[tornado.web.URLSpec],
+    routes: typing.List[tornado.web.URLSpec],
     *,
     swagger_url: str = "/api/doc",
     api_base_url: str = "/",
@@ -62,10 +60,10 @@ def setup_swagger(
     api_version: str = "1.0.0",
     title: str = "Swagger API",
     contact: str = "",
-    schemes: list[typing.Any] | None = None,
-    security_definitions: dict[str, typing.Any] | None = None,
-    security_schemes: dict[str, typing.Any] | None = None,
-    security: list[typing.Any] | None = None,
+    schemes: typing.Optional[typing.List[typing.Any]] = None,
+    security_definitions: typing.Optional[typing.Dict[str, typing.Any]] = None,
+    security_schemes: typing.Optional[typing.Dict[str, typing.Any]] = None,
+    security: typing.Optional[typing.List[typing.Any]] = None,
     display_models: bool = True,
     api_definition_version: str = API_SWAGGER_2,
     allow_cors: bool = False,

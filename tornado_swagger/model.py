@@ -1,7 +1,5 @@
 """Models."""
 
-from __future__ import annotations
-
 import typing
 
 from tornado_swagger._builders import build_swagger_docs
@@ -10,7 +8,7 @@ from tornado_swagger._builders import build_swagger_docs
 class _SwaggerModelsStore:
     """Singleton with models definitions."""
 
-    definitions: typing.ClassVar[dict[str, typing.Any]] = {}
+    definitions: typing.ClassVar[typing.Dict[str, typing.Any]] = {}
 
 
 def _save_model_doc(model: type) -> None:
@@ -21,7 +19,7 @@ def _save_model_doc(model: type) -> None:
         _SwaggerModelsStore.definitions[model.__name__] = build_swagger_docs(doc)
 
 
-def export_swagger_models() -> dict[str, typing.Any]:
+def export_swagger_models() -> typing.Dict[str, typing.Any]:
     """Get swagger models definition."""
     return _SwaggerModelsStore.definitions
 

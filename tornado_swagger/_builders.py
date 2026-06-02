@@ -1,8 +1,6 @@
 # pylint: disable=R0401,C0415
 """Builders."""
 
-from __future__ import annotations
-
 import abc
 import collections
 import inspect
@@ -11,12 +9,10 @@ import typing
 import warnings
 from pathlib import Path
 
+import tornado.web
 import yaml
 
 from tornado_swagger.const import API_OPENAPI_3, API_OPENAPI_3_1, API_SWAGGER_2
-
-if typing.TYPE_CHECKING:
-    import tornado.web
 
 SwaggerDict = typing.Dict[str, typing.Any]
 
@@ -58,13 +54,13 @@ def build_swagger_docs(endpoint_doc: str) -> SwaggerDict:
         return end_point_swagger_doc
 
 
-def _try_extract_doc(func: typing.Callable[..., typing.Any]) -> str | None:
+def _try_extract_doc(func: typing.Callable[..., typing.Any]) -> typing.Optional[str]:
     """Extract docstring from origin function removing decorators."""
     return inspect.unwrap(func).__doc__
 
 
-def _build_doc_from_func_doc(handler: type[tornado.web.RequestHandler]) -> dict[str, SwaggerDict]:
-    out: dict[str, SwaggerDict] = {}
+def _build_doc_from_func_doc(handler: typing.Type[tornado.web.RequestHandler]) -> typing.Dict[str, SwaggerDict]:
+    out: typing.Dict[str, SwaggerDict] = {}
 
     for supported_method in handler.SUPPORTED_METHODS:
         method = supported_method.lower()
@@ -76,12 +72,12 @@ def _build_doc_from_func_doc(handler: type[tornado.web.RequestHandler]) -> dict[
     return out
 
 
-def _try_extract_args(method_handler: typing.Callable[..., typing.Any]) -> list[str]:
+def _try_extract_args(method_handler: typing.Callable[..., typing.Any]) -> typing.List[str]:
     """Extract method args from origin function removing decorators."""
     return inspect.getfullargspec(inspect.unwrap(method_handler)).args[1:]
 
 
-def _extract_parameters_names(handler: type[tornado.web.RequestHandler], parameters_count: int, method: str) -> list[str]:
+def _extract_parameters_names(handler: typing.Type[tornado.web.RequestHandler], parameters_count: int, method: str) -> typing.List[str]:
     """Extract parameters names from handler."""
     if parameters_count == 0:
         return []
@@ -98,7 +94,7 @@ def _extract_parameters_names(handler: type[tornado.web.RequestHandler], paramet
     return parameters
 
 
-def _format_handler_path(route: tornado.web.URLSpec, method: str) -> str | None:
+def _format_handler_path(route: tornado.web.URLSpec, method: str) -> typing.Optional[str]:
     brackets_regex = re.compile(r"\(.*?\)")
     parameters = _extract_parameters_names(route.target, route.regex.groups, method)
     route_pattern = route.regex.pattern
@@ -134,8 +130,8 @@ def _clean_description(description: str) -> str:
     return "    ".join(description[_start_desc:].splitlines())
 
 
-def _extract_paths(routes: list[tornado.web.URLSpec]) -> collections.defaultdict[str, SwaggerDict]:
-    paths: collections.defaultdict[str, SwaggerDict] = collections.defaultdict(dict)
+def _extract_paths(routes: typing.List[tornado.web.URLSpec]) -> typing.DefaultDict[str, SwaggerDict]:
+    paths: typing.DefaultDict[str, SwaggerDict] = collections.defaultdict(dict)
 
     for route in routes:
         for method_name, method_description in _build_doc_from_func_doc(route.target).items():
@@ -159,17 +155,17 @@ class BaseDocBuilder(abc.ABC):
     @abc.abstractmethod
     def generate_doc(
         self,
-        routes: list[tornado.web.URLSpec],
+        routes: typing.List[tornado.web.URLSpec],
         *,
         api_base_url: str,
         description: str,
         api_version: str,
         title: str,
         contact: str,
-        schemes: list[typing.Any] | None,
-        security_definitions: SwaggerDict | None,
-        security_schemes: SwaggerDict | None,
-        security: list[typing.Any] | None,
+        schemes: typing.Optional[typing.List[typing.Any]],
+        security_definitions: typing.Optional[SwaggerDict],
+        security_schemes: typing.Optional[SwaggerDict],
+        security: typing.Optional[typing.List[typing.Any]],
         models: SwaggerDict,
         parameters: SwaggerDict,
     ) -> SwaggerDict:
@@ -186,17 +182,17 @@ class Swagger2DocBuilder(BaseDocBuilder):
 
     def generate_doc(
         self,
-        routes: list[tornado.web.URLSpec],
+        routes: typing.List[tornado.web.URLSpec],
         *,
         api_base_url: str,
         description: str,
         api_version: str,
         title: str,
         contact: str,
-        schemes: list[typing.Any] | None,
-        security_definitions: SwaggerDict | None,
-        security_schemes: SwaggerDict | None,
-        security: list[typing.Any] | None,
+        schemes: typing.Optional[typing.List[typing.Any]],
+        security_definitions: typing.Optional[SwaggerDict],
+        security_schemes: typing.Optional[SwaggerDict],
+        security: typing.Optional[typing.List[typing.Any]],
         models: SwaggerDict,
         parameters: SwaggerDict,
     ) -> SwaggerDict:
@@ -246,17 +242,17 @@ class OpenApiDocBuilder(BaseDocBuilder):
 
     def generate_doc(
         self,
-        routes: list[tornado.web.URLSpec],
+        routes: typing.List[tornado.web.URLSpec],
         *,
         api_base_url: str,
         description: str,
         api_version: str,
         title: str,
         contact: str,
-        schemes: list[typing.Any] | None,
-        security_definitions: SwaggerDict | None,
-        security_schemes: SwaggerDict | None,
-        security: list[typing.Any] | None,
+        schemes: typing.Optional[typing.List[typing.Any]],
+        security_definitions: typing.Optional[SwaggerDict],
+        security_schemes: typing.Optional[SwaggerDict],
+        security: typing.Optional[typing.List[typing.Any]],
         models: SwaggerDict,
         parameters: SwaggerDict,
     ) -> SwaggerDict:
@@ -307,18 +303,18 @@ doc_builders = {b.schema: b for b in [Swagger2DocBuilder(), OpenApiDocBuilder(),
 
 
 def generate_doc_from_endpoints(
-    routes: list[tornado.web.URLSpec],
+    routes: typing.List[tornado.web.URLSpec],
     *,
     api_base_url: str,
     description: str,
     api_version: str,
     title: str,
     contact: str,
-    schemes: list[typing.Any] | None,
-    security_definitions: SwaggerDict | None,
-    security: list[typing.Any] | None,
+    schemes: typing.Optional[typing.List[typing.Any]],
+    security_definitions: typing.Optional[SwaggerDict],
+    security: typing.Optional[typing.List[typing.Any]],
     api_definition_version: str,
-    security_schemes: SwaggerDict | None = None,
+    security_schemes: typing.Optional[SwaggerDict] = None,
 ) -> SwaggerDict:
     """Generate doc based on routes."""
     from tornado_swagger.model import export_swagger_models  # noqa: PLC0415
