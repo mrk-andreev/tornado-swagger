@@ -110,6 +110,29 @@ def _format_handler_path(route: tornado.web.URLSpec, method: str) -> typing.Opti
     return route_pattern[:-1]
 
 
+def _normalize_path_prefix(prefix: str) -> str:
+    """Normalize a path prefix for route path comparisons."""
+    if not prefix:
+        return ""
+    normalized = prefix if prefix.startswith("/") else f"/{prefix}"
+    return normalized.rstrip("/") or "/"
+
+
+def _strip_path_prefix(path: str, strip_prefix: typing.Optional[str]) -> str:
+    """Strip a path prefix only when it matches full path boundaries."""
+    if not strip_prefix:
+        return path
+
+    normalized_prefix = _normalize_path_prefix(strip_prefix)
+    if normalized_prefix == "/":
+        return path
+    if path == normalized_prefix:
+        return "/"
+    if path.startswith(f"{normalized_prefix}/"):
+        return path[len(normalized_prefix) :]
+    return path
+
+
 def nesteddict2yaml(d: SwaggerDict, indent: int = 10, result: str = "") -> str:
     for key, value in d.items():
         result += " " * indent + str(key) + ":"
@@ -130,7 +153,11 @@ def _clean_description(description: str) -> str:
     return "    ".join(description[_start_desc:].splitlines())
 
 
-def _extract_paths(routes: typing.List[tornado.web.URLSpec]) -> typing.DefaultDict[str, SwaggerDict]:
+def _extract_paths(
+    routes: typing.List[tornado.web.URLSpec],
+    *,
+    strip_prefix: typing.Optional[str],
+) -> typing.DefaultDict[str, SwaggerDict]:
     paths: typing.DefaultDict[str, SwaggerDict] = collections.defaultdict(dict)
 
     for route in routes:
@@ -139,6 +166,7 @@ def _extract_paths(routes: typing.List[tornado.web.URLSpec]) -> typing.DefaultDi
             if path_handler is None:
                 continue
 
+            path_handler = _strip_path_prefix(path_handler, strip_prefix)
             paths[path_handler].update({method_name: method_description})
 
     return paths
@@ -162,6 +190,7 @@ class BaseDocBuilder(abc.ABC):
         api_version: str,
         title: str,
         contact: str,
+        strip_prefix: typing.Optional[str],
         schemes: typing.Optional[typing.List[typing.Any]],
         security_definitions: typing.Optional[SwaggerDict],
         security_schemes: typing.Optional[SwaggerDict],
@@ -189,6 +218,7 @@ class Swagger2DocBuilder(BaseDocBuilder):
         api_version: str,
         title: str,
         contact: str,
+        strip_prefix: typing.Optional[str],
         schemes: typing.Optional[typing.List[typing.Any]],
         security_definitions: typing.Optional[SwaggerDict],
         security_schemes: typing.Optional[SwaggerDict],
@@ -218,7 +248,7 @@ class Swagger2DocBuilder(BaseDocBuilder):
             "schemes": schemes,
             "definitions": models,
             "parameters": parameters,
-            "paths": _extract_paths(routes),
+            "paths": _extract_paths(routes, strip_prefix=strip_prefix),
         }
         if contact:
             swagger_spec["info"]["contact"] = {"name": contact}
@@ -249,6 +279,7 @@ class OpenApiDocBuilder(BaseDocBuilder):
         api_version: str,
         title: str,
         contact: str,
+        strip_prefix: typing.Optional[str],
         schemes: typing.Optional[typing.List[typing.Any]],
         security_definitions: typing.Optional[SwaggerDict],
         security_schemes: typing.Optional[SwaggerDict],
@@ -275,7 +306,7 @@ class OpenApiDocBuilder(BaseDocBuilder):
                 "schemas": models,
                 "parameters": parameters,
             },
-            "paths": _extract_paths(routes),
+            "paths": _extract_paths(routes, strip_prefix=strip_prefix),
         }
 
         if contact:
@@ -315,6 +346,7 @@ def generate_doc_from_endpoints(
     security: typing.Optional[typing.List[typing.Any]],
     api_definition_version: str,
     security_schemes: typing.Optional[SwaggerDict] = None,
+    strip_prefix: typing.Optional[str] = None,
 ) -> SwaggerDict:
     """Generate doc based on routes."""
     from tornado_swagger.model import export_swagger_models  # noqa: PLC0415
@@ -330,6 +362,7 @@ def generate_doc_from_endpoints(
         api_version=api_version,
         title=title,
         contact=contact,
+        strip_prefix=strip_prefix,
         schemes=schemes,
         security_definitions=security_definitions,
         security_schemes=security_schemes,
