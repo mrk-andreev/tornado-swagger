@@ -1,5 +1,6 @@
 """Compatibility tests for generated Swagger/OpenAPI documents."""
 
+import sys
 from pathlib import Path
 
 import pytest
@@ -24,6 +25,13 @@ except ImportError:
 
 from tornado_swagger.const import API_OPENAPI_3, API_OPENAPI_3_1, API_SWAGGER_2
 from tornado_swagger.setup import export_swagger
+
+# The openapi-spec-validator release pinned for Python 3.7 (and the even older
+# one for 3.6) loads its bundled JSON schemas through urllib, which breaks on
+# those interpreters (it ends up calling ``.decode()`` on a file object). The
+# library works from Python 3.8 onwards, so schema validation is only attempted
+# there; the structural ``docs == expected`` assertion still runs everywhere.
+_VALIDATOR_USABLE = sys.version_info >= (3, 8)
 
 FIXTURES = Path(__file__).parent / "fixtures" / "compat"
 
@@ -107,6 +115,8 @@ def test_generated_document_matches_and_validates_against_spec(monkeypatch, fixt
 
     assert docs == expected
 
+    if not _VALIDATOR_USABLE:
+        pytest.skip("openapi-spec-validator schema loading is broken on Python < 3.8")
     if api_definition_version == API_OPENAPI_3_1 and not _SUPPORTS_OPENAPI_31:
         pytest.skip("installed openapi-spec-validator lacks OpenAPI 3.1 support")
     validate(docs)

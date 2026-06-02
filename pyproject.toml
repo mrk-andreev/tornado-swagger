@@ -1,5 +1,11 @@
 [build-system]
-requires = ["setuptools>=64", "wheel"]
+# setuptools>=64 enables PEP 660 editable installs used by the tox envs, but its
+# last release supporting Python 3.6 is 59.6.0, so 3.6 gets a lower floor.
+requires = [
+    "setuptools>=64; python_version >= '3.7'",
+    "setuptools>=40.8.0; python_version < '3.7'",
+    "wheel",
+]
 build-backend = "setuptools.build_meta"
 
 [tool.ruff]
