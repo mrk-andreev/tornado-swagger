@@ -1,11 +1,13 @@
 """App"""
+
 import tornado.web
+
+from tornado_swagger.setup import setup_swagger
 
 
 class ExampleHandler(tornado.web.RequestHandler):
-    def get(self):
-        """
-        Description end-point
+    def post(self):
+        """Description end-point
 
         ---
         tags:
@@ -45,8 +47,8 @@ class ExampleHandler(tornado.web.RequestHandler):
                 format: int32
                 description: User Status
         responses:
-        "201":
-          description: successful operation
+          201:
+            description: successful operation
         """
         self.write({})
 
@@ -58,7 +60,6 @@ class Application(tornado.web.Application):
 
     def __init__(self):
         settings = {"debug": True}
-        from tornado_swagger.setup import setup_swagger
 
         setup_swagger(self._routes)
-        super(Application, self).__init__(self._routes, **settings)
+        super().__init__(self._routes, **settings)

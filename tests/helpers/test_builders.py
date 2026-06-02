@@ -1,5 +1,7 @@
 """Test builders"""
+
 import functools
+import types
 
 import pytest
 import tornado.web
@@ -14,16 +16,13 @@ from tornado_swagger._builders import (
     build_swagger_docs,
     doc_builders,
     generate_doc_from_endpoints,
+    nesteddict2yaml,
 )
+from tornado_swagger.const import API_OPENAPI_3, API_OPENAPI_3_1, API_SWAGGER_2
 
-INVALID_ENDPOINT_DOC = (
-    SWAGGER_DOC_SEPARATOR
-    + """
+INVALID_ENDPOINT_DOC = SWAGGER_DOC_SEPARATOR + """
 tag"""
-)
-ENDPOINT_DOC = (
-    SWAGGER_DOC_SEPARATOR
-    + """
+ENDPOINT_DOC = SWAGGER_DOC_SEPARATOR + """
 tags:
   - Example
 summary: Create user
@@ -61,10 +60,9 @@ parameters:
           format: int32
           description: User Status
 responses:
-"201":
-  description: successful operation
+  201:
+    description: successful operation
 """
-)
 INVALID_SWAGGER_TEXT = "Invalid Swagger"
 
 
@@ -76,6 +74,14 @@ def test_extract_swagger_docs():
 def test_invalid_extract_swagger_docs():
     docs = build_swagger_docs(INVALID_ENDPOINT_DOC)
     assert INVALID_SWAGGER_TEXT in docs["tags"]
+
+
+def test_extract_swagger_docs_replaces_tabs():
+    docs = build_swagger_docs(SWAGGER_DOC_SEPARATOR + """
+tags:
+\t- Example
+""")
+    assert docs["tags"] == ["Example"]
 
 
 class ExampleHandler(tornado.web.RequestHandler):
@@ -111,6 +117,220 @@ def test_generate_doc_from_each_end_point(api_definition_version):
     assert docs
 
 
+def test_generate_doc_keeps_request_body_on_post_operations():
+    class PostExampleHandler(tornado.web.RequestHandler):
+        def post(self):
+            # Body is irrelevant; only the method signature and docstring are introspected.
+            pass
+
+    PostExampleHandler.post.__doc__ = ENDPOINT_DOC
+    routes = [
+        tornado.web.url(r"/api/example", PostExampleHandler, name="example"),
+    ]
+
+    docs = generate_doc_from_endpoints(
+        routes,
+        api_base_url="/",
+        description="",
+        api_version="",
+        title="",
+        contact="",
+        security_definitions=None,
+        schemes=[],
+        security=None,
+        api_definition_version=API_SWAGGER_2,
+    )
+
+    operation = docs["paths"]["/api/example"]["post"]
+    assert operation["parameters"][0]["in"] == "body"
+    assert operation["responses"] == {201: {"description": "successful operation"}}
+
+
+def test_generate_doc_unknown_api_definition_version():
+    with pytest.raises(ValueError, match="Unknown api_definition_version"):
+        generate_doc_from_endpoints(
+            [],
+            api_base_url="/",
+            description="",
+            api_version="",
+            title="",
+            contact="",
+            security_definitions=None,
+            schemes=[],
+            security=None,
+            api_definition_version="unknown",
+        )
+
+
+def test_generate_swagger_2_doc_includes_optional_metadata():
+    docs = generate_doc_from_endpoints(
+        [],
+        api_base_url="/api",
+        description="\n\nExample API",
+        api_version="1.2.3",
+        title="Example",
+        contact="Team",
+        security_definitions={"ApiKeyAuth": {"type": "apiKey"}},
+        schemes=["https"],
+        security=[{"ApiKeyAuth": []}],
+        api_definition_version=API_SWAGGER_2,
+    )
+
+    assert docs["swagger"] == "2.0"
+    assert docs["info"] == {
+        "title": "Example",
+        "description": "Example API",
+        "version": "1.2.3",
+        "contact": {"name": "Team"},
+    }
+    assert docs["basePath"] == "/api"
+    assert docs["schemes"] == ["https"]
+    assert docs["securityDefinitions"] == {"ApiKeyAuth": {"type": "apiKey"}}
+    assert docs["security"] == [{"ApiKeyAuth": []}]
+
+
+def test_generate_openapi_doc_uses_components_for_models_and_parameters(monkeypatch):
+    monkeypatch.setattr(
+        "tornado_swagger.model.export_swagger_models",
+        lambda: {"Pet": {"type": "object"}},
+    )
+    monkeypatch.setattr(
+        "tornado_swagger.parameter.export_swagger_parameters",
+        lambda: {"Limit": {"name": "limit"}},
+    )
+
+    docs = generate_doc_from_endpoints(
+        [],
+        api_base_url="/api",
+        description="Example API",
+        api_version="1.2.3",
+        title="Example",
+        contact="",
+        security_definitions=None,
+        schemes=["https"],
+        security=None,
+        api_definition_version=API_OPENAPI_3,
+    )
+
+    assert docs["openapi"] == "3.0.3"
+    assert docs["components"] == {
+        "schemas": {"Pet": {"type": "object"}},
+        "parameters": {"Limit": {"name": "limit"}},
+    }
+
+
+def test_generate_openapi_doc_uses_servers_instead_of_swagger_2_base_fields():
+    docs = generate_doc_from_endpoints(
+        [],
+        api_base_url="/api",
+        description="Example API",
+        api_version="1.2.3",
+        title="Example",
+        contact="",
+        security_definitions=None,
+        schemes=["https"],
+        security=None,
+        api_definition_version=API_OPENAPI_3,
+    )
+
+    assert docs["servers"] == [{"url": "/api"}]
+    assert "basePath" not in docs
+    assert "schemes" not in docs
+
+
+def test_generate_openapi_31_doc_emits_31_version():
+    docs = generate_doc_from_endpoints(
+        [],
+        api_base_url="/api",
+        description="Example API",
+        api_version="1.2.3",
+        title="Example",
+        contact="",
+        security_definitions=None,
+        schemes=["https"],
+        security=None,
+        api_definition_version=API_OPENAPI_3_1,
+    )
+
+    assert docs["openapi"] == "3.1.0"
+    assert docs["servers"] == [{"url": "/api"}]
+
+
+def test_generate_openapi_doc_includes_optional_metadata():
+    security_schemes = {"BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}}
+
+    docs = generate_doc_from_endpoints(
+        [],
+        api_base_url="/api",
+        description="Example API",
+        api_version="1.2.3",
+        title="Example",
+        contact="Team",
+        security_definitions=None,
+        security_schemes=security_schemes,
+        schemes=["https"],
+        security=[{"BearerAuth": []}],
+        api_definition_version=API_OPENAPI_3,
+    )
+
+    assert docs["info"]["contact"] == {"name": "Team"}
+    assert "securityDefinitions" not in docs
+    assert docs["components"]["securitySchemes"] == security_schemes
+    assert docs["security"] == [{"BearerAuth": []}]
+
+
+def test_generate_openapi_doc_keeps_security_definitions_backwards_compatibility():
+    security_definitions = {"ApiKeyAuth": {"type": "apiKey"}}
+
+    docs = generate_doc_from_endpoints(
+        [],
+        api_base_url="/api",
+        description="Example API",
+        api_version="1.2.3",
+        title="Example",
+        contact="",
+        security_definitions=security_definitions,
+        schemes=["https"],
+        security=[{"ApiKeyAuth": []}],
+        api_definition_version=API_OPENAPI_3,
+    )
+
+    assert docs["components"]["securitySchemes"] == security_definitions
+
+
+def test_generate_swagger_2_doc_rejects_openapi_security_schemes():
+    with pytest.raises(ValueError, match="security_schemes is only supported"):
+        generate_doc_from_endpoints(
+            [],
+            api_base_url="/api",
+            description="Example API",
+            api_version="1.2.3",
+            title="Example",
+            contact="",
+            security_definitions=None,
+            security_schemes={"BearerAuth": {"type": "http", "scheme": "bearer"}},
+            schemes=["https"],
+            security=[{"BearerAuth": []}],
+            api_definition_version=API_SWAGGER_2,
+        )
+
+
+def test_generate_swagger_2_doc_rejects_http_security_definition():
+    with pytest.raises(ValueError, match="HTTP security schemes require"):
+        generate_doc_from_endpoints(
+            [],
+            api_base_url="/api",
+            description="Example API",
+            api_version="1.2.3",
+            title="Example",
+            contact="",
+            security_definitions={"BearerAuth": {"type": "http", "scheme": "bearer"}},
+            schemes=["https"],
+            security=[{"BearerAuth": []}],
+            api_definition_version=API_SWAGGER_2,
+        )
+
+
 def test_extract_parameters_names_empty_parameter():
     class HandlerWithEmptyParameter(tornado.web.RequestHandler):
         def get(self):
@@ -138,6 +358,16 @@ def test_extract_parameters_names_multiple():
     assert parameters == ["posts_id", "post_id2", "post_id3"]
 
 
+def test_extract_parameters_names_ignores_underscore_placeholders():
+    class HandlerWithIgnoredParameter(tornado.web.RequestHandler):
+        def get(self, _, post_id):
+            # Body is irrelevant; only the method signature is introspected.
+            pass
+
+    parameters = _extract_parameters_names(HandlerWithIgnoredParameter, 2, method="get")
+    assert parameters == ["{?}", "post_id"]
+
+
 def test__format_handler_path():
     class HandlerWithMultipleParameter(tornado.web.RequestHandler):
         def get(self, posts_id, post_id2, post_id3):
@@ -150,9 +380,61 @@ def test__format_handler_path():
     assert route_path == "/api/{posts_id}/{post_id2}/{post_id3}"
 
 
+def test_format_handler_path_skips_illegal_route():
+    class HandlerWithMultipleParameter(tornado.web.RequestHandler):
+        def get(self, posts_id, post_id2):
+            # Body is irrelevant; only the method signature is introspected.
+            pass
+
+    route = types.SimpleNamespace(
+        target=HandlerWithMultipleParameter,
+        regex=types.SimpleNamespace(groups=2, pattern=r"/api/(\w+)$"),
+    )
+
+    with pytest.warns(UserWarning, match="Illegal route"):
+        route_path = _format_handler_path(route, method="get")
+
+    assert route_path is None
+
+
+def test_generate_doc_skips_illegal_route_paths():
+    class HandlerWithIllegalRoute(tornado.web.RequestHandler):
+        def get(self, posts_id, post_id2):
+            """---
+            tags:
+            - Example
+            """
+
+    route = types.SimpleNamespace(
+        target=HandlerWithIllegalRoute,
+        regex=types.SimpleNamespace(groups=2, pattern=r"/api/(\w+)$"),
+    )
+
+    with pytest.warns(UserWarning, match="Illegal route"):
+        docs = generate_doc_from_endpoints(
+            [route],
+            api_base_url="/",
+            description="",
+            api_version="",
+            title="",
+            contact="",
+            security_definitions=None,
+            schemes=[],
+            security=None,
+            api_definition_version=API_SWAGGER_2,
+        )
+
+    assert docs["paths"] == {}
+
+
+def test_nesteddict2yaml():
+    rendered = nesteddict2yaml({"info": {"title": "Example"}, "basePath": "/"}, indent=0)
+    assert rendered == "info:\n  title: Example\nbasePath: /\n"
+
+
 def test_try_extract_args():
     def method_handler(self, arg_name):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     args = _try_extract_args(method_handler)
     assert "arg_name" in args
@@ -168,7 +450,7 @@ def test_try_extract_decorated_args():
 
     @dummy_decorator
     def method_handler(self, arg_name):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     args = _try_extract_args(method_handler)
     assert "arg_name" in args
@@ -176,11 +458,10 @@ def test_try_extract_decorated_args():
 
 def test_try_extract_doc():
     def method_handler(self, arg_name):
-        """
-        ---
+        """---
         Foo
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     doc = _try_extract_doc(method_handler)
     assert "Foo" in doc
@@ -196,11 +477,10 @@ def test_try_extract_decorated_doc():
 
     @dummy_decorator
     def method_handler(self, arg_name):
-        """
-        ---
+        """---
         Foo
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     doc = _try_extract_doc(method_handler)
     assert "Foo" in doc

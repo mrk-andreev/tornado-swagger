@@ -1,0 +1,38 @@
+[build-system]
+# setuptools>=64 enables PEP 660 editable installs used by the tox envs, but its
+# last release supporting Python 3.6 is 59.6.0, so 3.6 gets a lower floor.
+requires = [
+    "setuptools>=64; python_version >= '3.7'",
+    "setuptools>=40.8.0; python_version < '3.7'",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 140
+target-version = "py37"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D203",  # incompatible with D211
+    "D213",  # incompatible with D212
+    "PLR0913",  # public API helpers intentionally accept multiple keyword options
+    "FA100",  # `from __future__ import annotations` is unavailable on Python 3.6, which is still supported
+]
+
+[tool.ruff.lint.per-file-ignores]
+"examples/**/*.py" = [
+    "ANN",  # examples favor compact handler signatures
+    "B019",  # decorator example intentionally documents wrapped handlers
+    "D",  # examples embed Swagger YAML in docstrings
+    "INP001",  # examples are standalone scripts
+    "RUF012",  # example routes are class-level Tornado declarations
+]
+"tests/**/*.py" = [
+    "ANN",  # tests do not need production-grade annotations
+    "D",  # test names describe behavior
+    "INP001",  # tests are not packaged modules
+    "S101",  # pytest assertions are intentional
+    "SLF001",  # tests validate private parsing helpers
+]

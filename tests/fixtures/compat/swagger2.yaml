@@ -1,0 +1,116 @@
+swagger: "2.0"
+info:
+  title: Compatibility API
+  description: Swagger 2 compatibility fixture
+  version: 1.0.0
+  contact:
+    name: API Team
+basePath: /v1
+schemes:
+- https
+definitions:
+  Pet:
+    type: object
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      tag:
+        type: string
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+parameters:
+  LimitParam:
+    name: limit
+    in: query
+    description: Maximum number of results
+    required: false
+    type: integer
+    format: int32
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    name: X-API-Key
+    in: header
+security:
+- ApiKeyAuth: []
+paths:
+  /pets/{pet_id}:
+    get:
+      tags:
+      - Pets
+      summary: Get a pet
+      produces:
+      - application/json
+      parameters:
+      - name: pet_id
+        in: path
+        required: true
+        type: string
+      - $ref: '#/parameters/LimitParam'
+      - name: X-Request-ID
+        in: header
+        required: false
+        type: string
+      responses:
+        "200":
+          description: Pet response
+          schema:
+            $ref: '#/definitions/Pet'
+          examples:
+            application/json:
+              id: 1
+              name: Fido
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+      - Pets
+      summary: Create a pet
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: pet_id
+        in: path
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Pet'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/Pet'
+  /pets/search:
+    post:
+      tags:
+      - Pets
+      summary: Search pets with form data
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: name
+        in: formData
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No content

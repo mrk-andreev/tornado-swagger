@@ -9,9 +9,8 @@ from tornado_swagger.setup import setup_swagger
 
 class ExampleHandler(tornado.web.RequestHandler):
     @functools.lru_cache()
-    def get(self, organization):
-        """
-        Description end-point
+    def post(self, organization):
+        """Description end-point
 
         ---
         tags:
@@ -51,8 +50,8 @@ class ExampleHandler(tornado.web.RequestHandler):
                 format: int32
                 description: User Status
         responses:
-        "201":
-          description: successful operation
+          201:
+            description: successful operation
         """
         self.write({"organization": organization})
 
@@ -66,7 +65,7 @@ class Application(tornado.web.Application):
         settings = {"debug": True}
 
         setup_swagger(self._routes)
-        super(Application, self).__init__(self._routes, **settings)
+        super().__init__(self._routes, **settings)
 
 
 if __name__ == "__main__":
