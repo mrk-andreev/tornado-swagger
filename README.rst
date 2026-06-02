@@ -228,8 +228,13 @@ Supported options:
   ``True``.
 - ``api_definition_version``: ``API_SWAGGER_2`` by default, or
   ``API_OPENAPI_3`` / ``API_OPENAPI_3_1``.
-- ``allow_cors``: Add permissive CORS headers to Swagger UI and
-  ``swagger.json`` responses. Defaults to ``False``.
+- ``allow_cors``: Add CORS headers to Swagger UI and ``swagger.json``
+  responses (both the ``GET`` and preflight ``OPTIONS`` responses). Defaults
+  to ``False``.
+- ``cors_origin``: Value for the ``Access-Control-Allow-Origin`` header when
+  ``allow_cors`` is enabled. Defaults to ``"*"``. Set a specific origin (e.g.
+  ``"https://example.com"``) to restrict cross-origin access; a ``Vary:
+  Origin`` header is then added automatically.
 
 To generate the schema without installing UI routes, use ``export_swagger``:
 
@@ -283,6 +288,11 @@ Version 1.6.0
 
 - Add OpenAPI 3.1 support and standards compatibility tests for Swagger 2.0,
   OpenAPI 3.0.3, and OpenAPI 3.1.0.
+- Fix ``allow_cors`` so CORS headers are also sent on the ``GET`` responses
+  (previously only the preflight ``OPTIONS`` response carried them, so
+  cross-origin spec fetches still failed in browsers).
+- Add ``cors_origin`` option to configure ``Access-Control-Allow-Origin``
+  instead of always using ``*``.
 - Fix OpenAPI 3 server metadata generation and security scheme placement.
 - Add OpenAPI 3 JWT bearer authentication support.
 - Fix executable Swagger example endpoint and installation issue.
