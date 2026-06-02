@@ -1,13 +1,18 @@
 -r requirements.txt
-pytest>=7.1.2,<8; python_version < "3.8"
+pytest>=6.2,<7; python_version < "3.7"
+pytest>=7.1.2,<8; python_version == "3.7"
 pytest>=8.3,<8.4; python_version == "3.8"
 pytest>=8.4,<9; python_version >= "3.9"
-pytest-cov>=5,<7
+pytest-cov>=3,<4; python_version < "3.7"
+pytest-cov>=4,<5; python_version == "3.7"
+pytest-cov>=5,<7; python_version >= "3.8"
 pytest-deadfixtures==2.2.1
-openapi-spec-validator>=0.5.6,<0.6; python_version < "3.10"
+openapi-spec-validator>=0.3,<0.4; python_version < "3.7"
+openapi-spec-validator>=0.5.6,<0.6; python_version >= "3.7" and python_version < "3.10"
 openapi-spec-validator>=0.9,<1; python_version >= "3.10"
-black==26.5.1
-ruff==0.15.15
-mypy>=1.4,<2
+black==26.5.1; python_version >= "3.9"
+ruff==0.15.15; python_version >= "3.7"
+mypy>=1.4,<2; python_version >= "3.8"
 types-PyYAML>=6,<7
+tox>=3.28,<4; python_version < "3.8"
 tox>=4,<5; python_version >= "3.8"

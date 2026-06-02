@@ -32,7 +32,7 @@ Installation
 Requirements
 ------------
 
-- Python 3.7 through 3.14
+- Python 3.6 through 3.14
 - Tornado 5.0 or newer
 - PyYAML 5.4 or newer
 
