@@ -6,7 +6,7 @@ from tornado_swagger.setup import setup_swagger
 
 
 class ExampleHandler(tornado.web.RequestHandler):
-    def get(self):
+    def post(self):
         """
         Description end-point
 
@@ -48,8 +48,8 @@ class ExampleHandler(tornado.web.RequestHandler):
                 format: int32
                 description: User Status
         responses:
-        "201":
-          description: successful operation
+          201:
+            description: successful operation
         """
         self.write({})
 

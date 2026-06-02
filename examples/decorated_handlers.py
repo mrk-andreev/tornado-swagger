@@ -9,7 +9,7 @@ from tornado_swagger.setup import setup_swagger
 
 class ExampleHandler(tornado.web.RequestHandler):
     @functools.lru_cache()
-    def get(self, organization):
+    def post(self, organization):
         """
         Description end-point
 
@@ -51,8 +51,8 @@ class ExampleHandler(tornado.web.RequestHandler):
                 format: int32
                 description: User Status
         responses:
-        "201":
-          description: successful operation
+          201:
+            description: successful operation
         """
         self.write({"organization": organization})
 

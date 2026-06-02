@@ -60,8 +60,8 @@ parameters:
           format: int32
           description: User Status
 responses:
-"201":
-  description: successful operation
+  201:
+    description: successful operation
 """
 INVALID_SWAGGER_TEXT = "Invalid Swagger"
 
@@ -115,6 +115,34 @@ def test_generate_doc_from_each_end_point(api_definition_version):
         api_definition_version=api_definition_version,
     )
     assert docs
+
+
+def test_generate_doc_keeps_request_body_on_post_operations():
+    class PostExampleHandler(tornado.web.RequestHandler):
+        def post(self):
+            pass
+
+    PostExampleHandler.post.__doc__ = ENDPOINT_DOC
+    routes = [
+        tornado.web.url(r"/api/example", PostExampleHandler, name="example"),
+    ]
+
+    docs = generate_doc_from_endpoints(
+        routes,
+        api_base_url="/",
+        description="",
+        api_version="",
+        title="",
+        contact="",
+        security_definitions=None,
+        schemes=[],
+        security=None,
+        api_definition_version=API_SWAGGER_2,
+    )
+
+    operation = docs["paths"]["/api/example"]["post"]
+    assert operation["parameters"][0]["in"] == "body"
+    assert operation["responses"] == {201: {"description": "successful operation"}}
 
 
 def test_generate_doc_unknown_api_definition_version():
