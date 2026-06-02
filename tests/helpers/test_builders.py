@@ -218,6 +218,25 @@ def test_generate_openapi_doc_uses_components_for_models_and_parameters(monkeypa
     }
 
 
+def test_generate_openapi_doc_uses_servers_instead_of_swagger_2_base_fields():
+    docs = generate_doc_from_endpoints(
+        [],
+        api_base_url="/api",
+        description="Example API",
+        api_version="1.2.3",
+        title="Example",
+        contact="",
+        security_definitions=None,
+        schemes=["https"],
+        security=None,
+        api_definition_version=API_OPENAPI_3,
+    )
+
+    assert docs["servers"] == [{"url": "/api"}]
+    assert "basePath" not in docs
+    assert "schemes" not in docs
+
+
 def test_generate_openapi_doc_includes_optional_metadata():
     security_schemes = {"BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}}
 

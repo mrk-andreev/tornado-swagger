@@ -50,9 +50,7 @@ def test_export_swagger_accepts_openapi_security_schemes():
         security=[{"BearerAuth": []}],
     )
 
-    assert docs["components"]["securitySchemes"] == {
-        "BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
-    }
+    assert docs["components"]["securitySchemes"] == {"BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}}
     assert docs["security"] == [{"BearerAuth": []}]
 
 

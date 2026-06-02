@@ -161,7 +161,7 @@ class BaseDocBuilder(abc.ABC):
         security_schemes,
         security,
         models,
-        parameters
+        parameters,
     ):
         """Generate docs"""
 
@@ -188,7 +188,7 @@ class Swagger2DocBuilder(BaseDocBuilder):
         security_schemes,
         security,
         models,
-        parameters
+        parameters,
     ):
         """Generate docs"""
         if security_schemes:
@@ -244,7 +244,7 @@ class OpenApiDocBuilder(BaseDocBuilder):
         security_schemes,
         security,
         models,
-        parameters
+        parameters,
     ):
         """Generate docs"""
         security_schemes = security_schemes or security_definitions
@@ -256,8 +256,9 @@ class OpenApiDocBuilder(BaseDocBuilder):
                 "description": _clean_description(description),
                 "version": api_version,
             },
-            "basePath": api_base_url,
-            "schemes": schemes,
+            "servers": [
+                {"url": api_base_url},
+            ],
             "components": {
                 "schemas": models,
                 "parameters": parameters,

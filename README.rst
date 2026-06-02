@@ -199,6 +199,8 @@ Supported options:
 
 - ``swagger_url``: UI URL prefix. Defaults to ``/api/doc``.
 - ``api_base_url``: API base path in the generated schema. Defaults to ``/``.
+  Swagger 2 emits this as ``basePath``; OpenAPI 3 emits it as
+  ``servers[0].url``.
 - ``description``: API description text.
 - ``api_version``: API version string.
 - ``title``: API title.
