@@ -235,6 +235,16 @@ Supported options:
   ``allow_cors`` is enabled. Defaults to ``"*"``. Set a specific origin (e.g.
   ``"https://example.com"``) to restrict cross-origin access; a ``Vary:
   Origin`` header is then added automatically.
+- ``swagger_ui_version``: Swagger UI release loaded from cdnjs. Defaults to
+  ``"4.13.2"``. When you change it, also pass the matching subresource
+  integrity (SRI) hashes via the options below, otherwise the browser will
+  block the assets.
+- ``swagger_ui_css_sri`` / ``swagger_ui_bundle_sri`` /
+  ``swagger_ui_preset_sri``: SRI hashes for ``swagger-ui.min.css``,
+  ``swagger-ui-bundle.min.js`` and ``swagger-ui-standalone-preset.min.js``
+  respectively. Defaults match ``swagger_ui_version``'s default. Find the
+  hashes for a given release on its cdnjs page. Pass empty strings to disable
+  integrity checking.
 
 To generate the schema without installing UI routes, use ``export_swagger``:
 

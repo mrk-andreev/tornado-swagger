@@ -108,6 +108,37 @@ def test_setup_swagger_accepts_relative_url_and_configures_handlers():
     assert "defaultModelsExpandDepth: -1" in SwaggerUiHandler.SWAGGER_HOME_TEMPLATE
 
 
+def test_setup_swagger_parametrizes_swagger_ui_version_and_sri():
+    routes = [tornado.web.url(r"/api/example", ExampleHandler)]
+
+    setup_swagger(
+        routes,
+        swagger_ui_version="5.17.14",
+        swagger_ui_css_sri="sha512-css",
+        swagger_ui_bundle_sri="sha512-bundle",
+        swagger_ui_preset_sri="sha512-preset",
+    )
+
+    template = SwaggerUiHandler.SWAGGER_HOME_TEMPLATE
+    assert "swagger-ui/5.17.14/swagger-ui.min.css" in template
+    assert "swagger-ui/5.17.14/swagger-ui-bundle.min.js" in template
+    assert "swagger-ui/5.17.14/swagger-ui-standalone-preset.min.js" in template
+    assert 'integrity="sha512-css"' in template
+    assert 'integrity="sha512-bundle"' in template
+    assert 'integrity="sha512-preset"' in template
+    assert "{{" not in template
+
+
+def test_setup_swagger_defaults_to_pinned_swagger_ui_version():
+    routes = [tornado.web.url(r"/api/example", ExampleHandler)]
+
+    setup_swagger(routes)
+
+    template = SwaggerUiHandler.SWAGGER_HOME_TEMPLATE
+    assert "swagger-ui/4.13.2/swagger-ui.min.css" in template
+    assert "{{ SWAGGER_UI_VERSION }}" not in template
+
+
 class StubHandler:
     def __init__(self, allow_cors, cors_origin="*"):
         self.allow_cors = allow_cors
