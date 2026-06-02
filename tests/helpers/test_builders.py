@@ -219,6 +219,8 @@ def test_generate_openapi_doc_uses_components_for_models_and_parameters(monkeypa
 
 
 def test_generate_openapi_doc_includes_optional_metadata():
+    security_definitions = {"ApiKeyAuth": {"type": "apiKey"}}
+
     docs = generate_doc_from_endpoints(
         [],
         api_base_url="/api",
@@ -226,14 +228,15 @@ def test_generate_openapi_doc_includes_optional_metadata():
         api_version="1.2.3",
         title="Example",
         contact="Team",
-        security_definitions={"ApiKeyAuth": {"type": "apiKey"}},
+        security_definitions=security_definitions,
         schemes=["https"],
         security=[{"ApiKeyAuth": []}],
         api_definition_version=API_OPENAPI_3,
     )
 
     assert docs["info"]["contact"] == {"name": "Team"}
-    assert docs["securityDefinitions"] == {"ApiKeyAuth": {"type": "apiKey"}}
+    assert "securityDefinitions" not in docs
+    assert docs["components"]["securitySchemes"] == security_definitions
     assert docs["security"] == [{"ApiKeyAuth": []}]
 
 
