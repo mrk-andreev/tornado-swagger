@@ -1,11 +1,9 @@
+import re
 from os.path import dirname
 from os.path import join
 
 from setuptools import find_packages
 from setuptools import setup
-from setuptools.command.test import test as TestCommand
-
-from tornado_swagger import __version__
 
 PACKAGE_NAME = "tornado-swagger"
 DESCRIPTION = "Swagger API Documentation builder for tornado server"
@@ -36,22 +34,14 @@ with open(join(dirname(__file__), "requirements.txt"), encoding="utf-8") as f:
 with open(join(dirname(__file__), "README.rst"), encoding="utf-8") as f:
     LONG_DESCRIPTION = f.read()
 
-
-class PyTest(TestCommand):
-    user_options = []
-
-    def run(self):
-        import subprocess
-        import sys
-
-        errno = subprocess.call([sys.executable, "-m", "pytest", "tests"])
-        raise SystemExit(errno)
+with open(join(dirname(__file__), "tornado_swagger", "__init__.py"), encoding="utf-8") as f:
+    VERSION = re.search(r'__version__ = "([^"]+)"', f.read()).group(1)
 
 
 def setup_package():
     setup(
         name=PACKAGE_NAME,
-        version=__version__,
+        version=VERSION,
         install_requires=PACKAGES_REQUIRED,
         url=HOME_URL,
         download_url=DOWNLOAD_URL,
@@ -63,8 +53,6 @@ def setup_package():
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         classifiers=CLASSIFIERS,
-        tests_require=["pytest"],
-        cmdclass=dict(test=PyTest),
     )
 
 
