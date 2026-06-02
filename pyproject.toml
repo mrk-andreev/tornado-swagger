@@ -12,6 +12,7 @@ ignore = [
     "D203",  # incompatible with D211
     "D213",  # incompatible with D212
     "PLR0913",  # public API helpers intentionally accept multiple keyword options
+    "FA100",  # `from __future__ import annotations` is unavailable on Python 3.6, which is still supported
 ]
 
 [tool.ruff.lint.per-file-ignores]
