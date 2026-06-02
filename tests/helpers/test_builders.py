@@ -120,6 +120,7 @@ def test_generate_doc_from_each_end_point(api_definition_version):
 def test_generate_doc_keeps_request_body_on_post_operations():
     class PostExampleHandler(tornado.web.RequestHandler):
         def post(self):
+            # Body is irrelevant; only the method signature and docstring are introspected.
             pass
 
     PostExampleHandler.post.__doc__ = ENDPOINT_DOC
@@ -360,6 +361,7 @@ def test_extract_parameters_names_multiple():
 def test_extract_parameters_names_ignores_underscore_placeholders():
     class HandlerWithIgnoredParameter(tornado.web.RequestHandler):
         def get(self, _, post_id):
+            # Body is irrelevant; only the method signature is introspected.
             pass
 
     parameters = _extract_parameters_names(HandlerWithIgnoredParameter, 2, method="get")
@@ -381,6 +383,7 @@ def test__format_handler_path():
 def test_format_handler_path_skips_illegal_route():
     class HandlerWithMultipleParameter(tornado.web.RequestHandler):
         def get(self, posts_id, post_id2):
+            # Body is irrelevant; only the method signature is introspected.
             pass
 
     route = types.SimpleNamespace(

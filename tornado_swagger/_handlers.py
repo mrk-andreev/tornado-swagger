@@ -10,6 +10,8 @@ class TornadoBaseHandler(tornado.web.RequestHandler):
     cors_origin: str = "*"
 
     def data_received(self, chunk: bytes) -> None:
+        # Streamed request bodies are not used by these handlers; the abstract
+        # method from tornado.web.RequestHandler is overridden as a no-op.
         pass
 
     def set_cors_headers(self) -> None:
