@@ -11,6 +11,7 @@ format:
 lint:
 	ruff check $(PACKAGE_CODE) $(OTHER_CODE)
 	black --line-length=140 --check $(PACKAGE_CODE) $(OTHER_CODE)
+	$(PYTHON) -m mypy $(PACKAGE_CODE)
 
 test:
 	$(PYTHON) -m pytest .

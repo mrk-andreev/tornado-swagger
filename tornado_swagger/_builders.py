@@ -20,14 +20,14 @@ SWAGGER_DOC_SEPARATOR = "---"
 
 def _extract_swagger_definition(endpoint_doc: str):
     """Extract swagger definition after SWAGGER_DOC_SEPARATOR"""
-    endpoint_doc = endpoint_doc.splitlines()
+    endpoint_doc_lines = endpoint_doc.splitlines()
 
-    for i, doc_line in enumerate(endpoint_doc):
+    for i, doc_line in enumerate(endpoint_doc_lines):
         if SWAGGER_DOC_SEPARATOR in doc_line:
             end_point_swagger_start = i + 1
-            endpoint_doc = endpoint_doc[end_point_swagger_start:]
+            endpoint_doc_lines = endpoint_doc_lines[end_point_swagger_start:]
             break
-    return "\n".join(endpoint_doc)
+    return "\n".join(endpoint_doc_lines)
 
 
 def build_swagger_docs(endpoint_doc: str):

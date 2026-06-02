@@ -1,12 +1,14 @@
 """Models"""
 
+import typing
+
 from tornado_swagger._builders import build_swagger_docs
 
 
 class _SwaggerModelsStore:
     """Singleton with models definitions"""
 
-    definitions = {}
+    definitions: typing.Dict[str, typing.Any] = {}
 
 
 def _save_model_doc(model):
