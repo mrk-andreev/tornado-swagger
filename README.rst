@@ -298,6 +298,12 @@ Version 1.6.0
 
 - Add OpenAPI 3.1 support and standards compatibility tests for Swagger 2.0,
   OpenAPI 3.0.3, and OpenAPI 3.1.0.
+- Add ``swagger_ui_version`` option to ``setup_swagger`` so the Swagger UI
+  release loaded from cdnjs can be parametrized (defaults to ``4.13.2``).
+- Add ``swagger_ui_css_sri``, ``swagger_ui_bundle_sri`` and
+  ``swagger_ui_preset_sri`` options to supply matching subresource integrity
+  hashes for a custom version (pass empty strings to disable integrity
+  checking).
 - Fix ``allow_cors`` so CORS headers are also sent on the ``GET`` responses
   (previously only the preflight ``OPTIONS`` response carried them, so
   cross-origin spec fetches still failed in browsers).
