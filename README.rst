@@ -278,6 +278,17 @@ versions, and Tornado 6.5.6 on Python 3.11, 3.12, 3.13, and 3.14.
 What’s new?
 -----------
 
+Version 1.6.0
+~~~~~~~~~~~~~
+
+- Add OpenAPI 3.1 support and standards compatibility tests for Swagger 2.0,
+  OpenAPI 3.0.3, and OpenAPI 3.1.0.
+- Fix OpenAPI 3 server metadata generation and security scheme placement.
+- Add OpenAPI 3 JWT bearer authentication support.
+- Fix executable Swagger example endpoint and installation issue.
+- Add tox, Ruff linting, mypy checks, and broader test coverage.
+- Improve README and example documentation.
+
 Version 1.5.0
 ~~~~~~~~~~~~~
 
